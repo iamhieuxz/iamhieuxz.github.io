@@ -12,7 +12,7 @@ body {
 }
 
 /* Overlay */
-.overlay {
+/* .overlay {
     z-index: 10;
     position: absolute;
     height: 100vh; 
@@ -22,7 +22,7 @@ body {
     bottom: 0;
     left: 0;
   
-}
+} */
 .overlay h1 {
     position: absolute;
     top :50%;
@@ -127,7 +127,7 @@ body {
     color: #2c3e50;
 }
 .typescrip span {
-    color : #e74c3c;
+    color : #27ae60;
 }
 .typed-cursor {
     font-weight: 100;
@@ -159,7 +159,7 @@ figure {
 }
 .project figcaption {
     padding: 1em;
-    background: #e74c3c;
+    background: #27ae60;
     color : #ecf0f1;
 }
 
@@ -220,6 +220,12 @@ figure {
     margin:  2em 0;
 }
 
+.bottom .copyright {
+    width: 100%;
+    font-size: 12px ;
+    margin: 2rem 0;
+}
+
 
 
 
@@ -229,13 +235,19 @@ figure {
     bottom: 0;
     left: 15px;
     opacity: 0.7;
+    cursor: pointer;
+    display: block;
+    opacity: 0.6;
 }
 .media-social {
     position: fixed;
-    top : 88%;
+    top : 85%;
     left: 10px;
     transform: translate(-50%, -50%);
-    display: none;
+    opacity: 0;
+}
+.media-social-active {
+    animation: mediaFade 0.5s forwards ease;
 }
 
 .media-social li{
@@ -350,5 +362,18 @@ figure {
     to {
         opacity: 1;
         transform: translateX(0px);
+    }
+}
+
+@keyframes mediaFade {
+    from {
+        opacity: 0;
+        left: 0;
+        transform: translateY(0px);
+    }
+    to {
+        opacity: 1;
+        left: 0;
+        transform: translateY(-60px);
     }
 }

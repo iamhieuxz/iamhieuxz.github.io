@@ -13,8 +13,8 @@
 
 // navSilde animation 
 const navSlide = ()=> {
-     const burger = document.querySelector('.burger');
-     const nav = document.querySelector('.nav-link');
+    const burger = document.querySelector('.burger');
+    const nav = document.querySelector('.nav-link');
     const navLink = document.querySelectorAll('.nav-link li')
 
      burger.addEventListener('click', () => {
@@ -46,10 +46,19 @@ var typed = new Typed(".type", {
   strings: [
     "Hieu",
     "a Web Designer",
-    "a Web Developer",
+    "a Front-End Developer",
     "a Creator"
   ],
-  typeSpeed : 50,
-  backSpeed : 50, 
+  typeSpeed : 30,
+  backSpeed : 30, 
   loop:true
 });
+
+// meida social 
+
+const socialTag = document.querySelector('.media-tag');
+const socialList = document.querySelector('.media-social')
+
+socialTag.addEventListener('click', () => {
+  socialList.classList.toggle('media-social-active');
+})
