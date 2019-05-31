@@ -1,5 +1,4 @@
-// overlay
-
+$( document ).ready( () => {
   TweenMax.to('.overlay h1',2 , {
     opacity : 0,
     y : -60,
@@ -63,3 +62,5 @@ const socialList = document.querySelector('.media-social')
 socialTag.addEventListener('click', () => {
   socialList.classList.toggle('media-social-active');
 })
+
+});
