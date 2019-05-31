@@ -45,9 +45,10 @@ navSlide();
 var typed = new Typed(".type", {
   strings: [
     "Hieu",
-    "a Web Designer",
-    "a Front-End Developer",
-    "a Creator"
+    "a Creator",
+    "a Graphic Designer",
+    "a Front-End Developer"
+  
   ],
   typeSpeed : 30,
   backSpeed : 30, 

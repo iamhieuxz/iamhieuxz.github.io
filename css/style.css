@@ -4,6 +4,7 @@ html {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -60,13 +61,16 @@ body {
 
 .logo {
     text-decoration: none;
-    text-transform: uppercase;
     letter-spacing: 3px;
-    font-weight: bolder;
+    font-weight: lighter;
     color: #ecf0f1;
     display: inline-block;
     vertical-align: middle;
-    
+    display: flex;   
+}
+.logo span {
+    vertical-align: center;
+    margin: 0 0.5rem;
 }
 
 .nav-link {
@@ -118,8 +122,8 @@ body {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 20vh;
-    margin-bottom: 10px;
+    margin-top: 30vh;
+    margin-bottom: 60px;
     
 }
 .typescrip h3 {
@@ -137,7 +141,7 @@ body {
 
 .work {
     line-height: 1.3;
-    margin: 0 0 4em;
+    padding-top: 90px;
 }
 
 .project {
@@ -187,28 +191,73 @@ figure {
     padding: 0;
     font-family: 'Roboto';
     font-weight: 300;
+    text-align: center;
 }
 .bottom footer {
     text-align: center;
     padding-top: 90px;
 }
+ 
 
 .bottom a {
+    text-decoration: none;
     display: inline-block;
     border: none;
-    background: #e74c3c;
+    background: transparent;
     padding: 12px 36px;
     font-size: 1.5rem;
     color: #ecf0f1;
-    border-radius: 40px;
     line-height: 40px;
-    text-decoration: none;
 }
-.bottom a:hover {
-    opacity: 0.7;
-    transition : all 0.5s ease;
+.button {
+  position: relative;
+  padding: 1em 1.5em;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  outline: none;
+  font-size: 18px;
+  margin: 1em 0.8em;
 }
-
+.button.type3 {
+  color: #e74c3c;
+}
+.button.type3.type3::after, 
+.button.type3.type3::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 20%;
+  height: 20%;
+  border: 2px solid;
+  transition: all 0.6s ease;
+  border-radius: 2px;
+}
+.button.type3.type3::after {
+  bottom: 0;
+  right: 0;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: #e74c3c;
+  border-right-color:#e74c3c;
+}
+.button.type3.type3::before {
+  top: 0;
+  left: 0;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  border-top-color: #e74c3c;
+  border-left-color: #e74c3c;
+}
+.button.type3.type3:hover:after, 
+.button.type3.type3:hover:before {
+  border-bottom-color: #e74c3c;
+  border-right-color: #e74c3c;
+  border-top-color: #e74c3c;
+  border-left-color: #e74c3c;
+  width: 100%;
+  height: 100%;
+}
 .bottom span {
     padding : 1em 10px;
     font-family: "Poppins";
