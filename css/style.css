@@ -126,27 +126,99 @@ body {
 /* Profile */
 #profile {
   min-height: 40vh;
-  width: 100%;
+  width: 90%;
+  margin : 0 auto;
   box-sizing: border-box;
-  margin-top : 50px;
+  margin-top : 100px;
   margin-bottom : 100px;
+  padding-top: 200px;
 }
-.profile .prof-row {
+.prof-row {
   display : flex;
   justify-content: space-around;
+  width: 100%;
+  margin : 0 auto;
 }
 .prof-left {
   position: relative;
+  width : 40%;
 }
 .prof-left img {
-  width: 400px;
+  width: 380px;
   height: auto;
 }
 .prof-left .outline {
-  background: #e74c3c;
-  color :#
+  width: 380px;
+  height: 380px;
+  background: transparent;
+  border: 2px solid #e74c3c;
+  position: absolute;
+  top : -5%;
+  left: -5%;
+  transform: translateY(,-50%);
 }
 
+.prof-left .title-left {
+  font-size: 1rem;
+  letter-spacing: 10px;
+  font-weight: lighter;
+  transform: rotate(90deg);
+  position : absolute;
+  right : 18%;
+  top : 20%;
+}
+
+.prof-left .outline::after {
+  content: '' ;
+  width: 380px;
+  height: 380px;
+  background: transparent;
+  border: 2px solid #e74c3c;
+  position: absolute;
+  top : -3%;
+  left: -3%;
+  transform: translateY(,-50%);
+}
+
+
+.prof-right {
+  width :45%;
+  position: relative;
+  color : #2c3e50;
+}
+
+
+.prof-right .button-prof {
+  width : 150px;
+  text-align: center;
+  line-height: 45px;
+  text-decoration: none;
+  color: #e74c3c;
+  position: absolute;
+  margin: 0 0;
+  bottom: 20%;  
+}
+.prof-right .button-prof svg {
+  width: 100%;
+  height: 45px;
+  position: absolute;
+  top:0;
+  left: 0;
+}
+.prof-right .button-prof rect {
+  fill: none;
+  stroke: #e74c3c;
+  stroke-width: 3;
+  stroke-dasharray: 422, 0;
+  transition: all 0.6s ease;
+  
+}
+.prof-right .button-prof:hover rect {
+  stroke-width: 5;
+  stroke-dashoffset: 48;
+  stroke-dasharray: 15, 295;
+  transition: all 0.6s ease;
+}
 
 
 
@@ -549,6 +621,16 @@ body {
         padding: 0;
         margin: 0;
     }
+    #profile {
+      display: none;
+    }
+    .prof-left {
+      width: 100%;
+    }
+    .prof-right {
+      width: 100%;
+    }
+
     #timeline {
       display: flex;
       flex-direction: column;

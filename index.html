@@ -14,7 +14,7 @@
     <meta name="theme-color" content="#ffffff">
     <!-- Css sheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.2/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.0.2/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="./css/style.css">
     <!-- Scrip -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -28,11 +28,11 @@
         <h1>Hello I'm Hieu</h1>
     </div> -->
 
-    <div class="wrapper">
+    <div class="wrapper" id="home">
         
         <div class="nav-bar">
             
-            <a href="index.html" class="logo">
+            <a href="#home" class="logo">
                 <img src="./img/favicon-32x32.png" alt="">
                 <span>Iamhieuxz</span>
             
@@ -40,7 +40,7 @@
             </a>
 
             <ul  class="nav-link">
-                <li><a href="#about">About</a></li>
+                <li><a href="#profile">About</a></li>
                 <li><a href="#work">Work</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>    
@@ -61,12 +61,20 @@
         <div class="profile" id="profile">
             <div class="prof-row">
                 <div class="prof-left">
-                    <div class="outline"></div>
                     <img src="./img/profile1.jpg" alt="">
+                    <div class="outline"></div>
+                    <div class="title-left"><i class='bx bx-right-arrow'></i>about</div>
                 </div>
                 <div class="prof-right">
-                    <div class="text-prof">I'm The Hieu</div>
-                    <a href="" class="button-prof"></a>
+                    <h2 class="text-prof">Nguyen The Hieu</h2>
+                    <h5>His Story</h5>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Placeat ea repellendus fuga, eveniet ducimus, facere numquam iste possimus omnis reiciendis iure nam recusandae dolorem cum voluptatibus. Ipsam in eligendi officiis?</p>
+                    <a href="#about" class="button-prof">
+                        <svg>
+                            <rect x="0" y="0" fill="none" widtd="100%" height="100%"/>
+                        </svg>
+                        Explore
+                    </a>
                 </div>
             </div>
         </div>
@@ -74,11 +82,10 @@
         <div class="about" id="about">
             <section id="timeline">
                 <div class="tl-item">
-    
                     <div class="tl-bg" style="background-image: url('./img/1.jpg') "></div>
                     
                     <div class="tl-year">
-                      <p class="f2 heading--sanSerif">2011</p>
+                      <p class="f2 heading--sanSerif">2016</p>
                     </div>
                 
                     <div class="tl-content">
@@ -93,7 +100,7 @@
                     <div class="tl-bg" style="background-image: url('./img/2.jpg')"></div>
                     
                     <div class="tl-year">
-                      <p class="f2 heading--sanSerif">2013</p>
+                      <p class="f2 heading--sanSerif">2017</p>
                     </div>
                 
                     <div class="tl-content">
@@ -108,7 +115,7 @@
                     <div class="tl-bg" style="background-image: url('./img/3.jpg')"></div>
                     
                     <div class="tl-year">
-                      <p class="f2 heading--sanSerif">2014</p>
+                      <p class="f2 heading--sanSerif">2018</p>
                     </div>
                 
                     <div class="tl-content">
@@ -123,7 +130,7 @@
                     <div class="tl-bg" style="background-image: url('./img/4.jpg')"></div>
                     
                     <div class="tl-year">
-                      <p class="f2 heading--sanSerif">2016</p>
+                      <p class="f2 heading--sanSerif">2019</p>
                     </div>
                 
                     <div class="tl-content">
@@ -217,14 +224,7 @@
                             </figure>
                     </a>
                 </div>
-    
-
-
-
-
-
-
-        
+           
         <h5 class="media-tag">@iamhieuxz</h5>
         <div class="media-social">
             <ul>    
