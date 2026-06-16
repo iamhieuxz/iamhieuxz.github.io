@@ -1,248 +1,161 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Fav Ico -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./img/favicon-16x16.png">
-    <link rel="manifest" href="./img/site.webmanifest">
-    <link rel="mask-icon" href="./img/safari-pinned-tab.svg" color="#179fc6">
-    <meta name="msapplication-TileColor" content="#2b5797">
-    <meta name="theme-color" content="#ffffff">
-    <!-- Css sheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <link href='https://unpkg.com/boxicons@2.0.2/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="./css/style.css">
-    <title>I'm Hieu | @iamhieuxz </title>
+    <title>Hiếu XZ | Creative Portfolio</title>
+    <meta name="description" content="Portfolio sáng tạo của Hiếu XZ — Front-End Developer & UI/UX Enthusiast">
+
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/svg+xml" href="img/logo.svg">
+    <link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#ec4899">
+    <link rel="manifest" href="img/site.webmanifest">
+    <meta name="theme-color" content="#f8fafc">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Local Fonts & Styles -->
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
-<body>
-    <!-- <div class="overlay">
-        <h1>Hello I'm Hieu</h1>
-    </div> -->
+<body class="antialiased relative selection:bg-pink-300 selection:text-pink-900">
 
-    <div class="wrapper" id="home">
-        
-        <div class="nav-bar">
-            
-            <a href="#home" class="logo">
-                <img src="./img/favicon-32x32.png" alt="">
-                <span>Iamhieuxz</span>
+    <!-- === BACKGROUND CỰC ẢO (ANIMATED BLOBS) === -->
+    <div class="fixed inset-0 w-full h-full z-[-1] overflow-hidden bg-slate-50 pointer-events-none">
+        <div class="absolute top-0 -left-4 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob"></div>
+        <div class="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-8 left-20 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-blob animation-delay-4000"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-72 h-72 bg-cyan-300 rounded-full mix-blend-multiply filter blur-2xl opacity-60 animate-blob"></div>
+    </div>
+
+    <!-- Thanh Điều Hướng -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 glass-card rounded-full px-6 py-4 transition-all duration-300">
+        <div class="flex justify-between items-center">
+            <a href="#" class="site-logo">
+                <img src="img/logo.svg" alt="Hiếu XZ Logo" width="32" height="32">
+                <span>iamhieuxz</span>
             </a>
-            <ul  class="nav-link">
-                <li><a href="#profile">About</a></li>
-                <li><a href="#work">Work</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>    
+            <div class="hidden md:flex items-center space-x-8 font-bold text-slate-600">
+                <a href="#about" class="hover:text-pink-500 transition-colors">Giới Thiệu</a>
+                <a href="#projects" class="hover:text-violet-500 transition-colors">Dự Án</a>
+                <a href="#contact" class="hover:text-cyan-500 transition-colors">Liên Hệ</a>
+            </div>
+            <button class="md:hidden text-slate-700 text-xl" aria-label="Mở menu"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </nav>
 
-            <div class="burger">
-                <div class="line1"></div>
-                <div class="line2"></div>
-                <div class="line3"></div>
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center pt-28 px-6">
+        <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            <div class="text-center lg:text-left order-2 lg:order-1" data-aos="fade-up-right" data-aos-duration="1000">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-sm font-bold text-violet-600 mb-6">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-ping"></span>
+                    Sẵn sàng cho những ý tưởng mới
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 text-slate-800 leading-[1.1]">
+                    Xin chào 👋 <br> tôi là
+                    <span class="relative">
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500">Hiếu</span>
+                        <svg class="absolute w-full h-4 -bottom-1 left-0 text-yellow-400" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 15 100 5" stroke="currentColor" stroke-width="4" fill="transparent"/></svg>
+                    </span>
+                </h1>
+
+                <p class="text-xl md:text-2xl text-slate-600 font-medium mb-8 h-10">
+                    Chuyên gia <span id="typed-text" class="text-pink-500 font-bold"></span>
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                    <a href="#projects" class="w-full sm:w-auto px-8 py-4 rounded-full font-bold bg-slate-900 text-white shadow-xl shadow-slate-900/20 hover:-translate-y-1 transition-all duration-300">
+                        Khám Phá Dự Án
+                    </a>
+                    <a href="https://github.com/iamhieuxz" target="_blank" class="w-full sm:w-auto px-8 py-4 rounded-full font-bold glass-card text-slate-800 hover:bg-white hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-github text-xl"></i> Theo Dõi GitHub
+                    </a>
+                </div>
             </div>
 
-        </div>
-        <div class="typescrip">
-                <h3 id="typejs">
-                    I'm <span class="type"></span>
-                </h3>
-        </div>
+            <div class="flex justify-center order-1 lg:order-2" data-aos="zoom-in" data-aos-duration="1200">
+                <div class="relative w-64 h-64 md:w-80 md:h-80 animate-float">
+                    <div class="absolute inset-0 border-4 border-dashed border-pink-400/50 rounded-full animate-[spin_10s_linear_infinite]"></div>
+                    <img src="https://avatars.githubusercontent.com/iamhieuxz" alt="Avatar"
+                         class="absolute inset-4 w-[calc(100%-32px)] h-[calc(100%-32px)] rounded-full object-cover shadow-2xl z-10 border-4 border-white bg-white">
 
-        <div class="profile" id="profile">
-            <div class="prof-row">
-                <div class="prof-left">
-                    <img src="./img/avata.jpg" alt="avatar">
-                    <div class="outline"></div>
-                    <div class="title-left"><i class='bx bx-right-arrow'></i>about</div>
-                </div>
-                <div class="prof-right">
-                    <h2 class="text-prof">Nguyen The Hieu</h2>
-                    <h5>His Story</h5>
-                    <p>Xin chào , tôi là Hiếu. Tôi sinh ra ở Nghệ An lớn lên ở HCM. Hiện tại đang là sv đh TDM , BD. KHoa Hệ thống thông tin. Tôi có đam mê với Design nói chung và thiết kế web nói riêng. Tôi khá thích rap và hiphop và nó cũng ảnh hưởng đến phong cách thiết kế của tôi.</p>
-                    <a href="#about" class="button-prof">
-                        <svg>
-                            <rect x="0" y="0" fill="none" widtd="100%" height="100%"/>
-                        </svg>
-                        Explore
-                    </a>
+                    <div class="absolute -top-4 -right-4 bg-white p-3 rounded-2xl shadow-xl z-20 text-yellow-400 text-2xl rotate-12"><i class="fa-solid fa-star"></i></div>
+                    <div class="absolute bottom-4 -left-6 bg-white p-3 rounded-2xl shadow-xl z-20 text-cyan-500 text-2xl -rotate-12"><i class="fa-solid fa-code"></i></div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- <div class="about" id="about">
-            <section id="timeline">
-                <div class="tl-item">
-                    <div class="tl-bg" style="background-image: url('./img/1.jpg') "></div>
-                    
-                    <div class="tl-year">
-                      <p class="f2 heading--sanSerif">2016</p>
-                    </div>
-                
-                    <div class="tl-content">
-                      <h1>Lorem ipsum dolor sit</h1>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit.</p>
-                    </div>
-                
-                  </div>
-                
-                  <div class="tl-item">
-                    
-                    <div class="tl-bg" style="background-image: url('./img/2.jpg')"></div>
-                    
-                    <div class="tl-year">
-                      <p class="f2 heading--sanSerif">2017</p>
-                    </div>
-                
-                    <div class="tl-content">
-                      <h1 class="f3 text--accent ttu">Vestibulum laoreet lorem</h1>
-                      <p>Suspendisse potenti. Sed sollicitudin eros lorem, eget accumsan risus dictum id. Maecenas dignissim ipsum vel mi rutrum egestas. Donec mauris nibh, facilisis ut hendrerit vel, fringilla sed felis. Morbi sed nisl et arcu.</p>
-                    </div>
-                
-                  </div>
-                
-                  <div class="tl-item">
-                    
-                    <div class="tl-bg" style="background-image: url('./img/3.jpg')"></div>
-                    
-                    <div class="tl-year">
-                      <p class="f2 heading--sanSerif">2018</p>
-                    </div>
-                
-                    <div class="tl-content">
-                      <h1 class="f3 text--accent ttu">Phasellus mauris elit</h1>
-                      <p>Mauris cursus magna at libero lobortis tempor. Suspendisse potenti. Aliquam interdum vulputate neque sit amet varius. Maecenas ac pulvinar nisi. Fusce vitae nunc ultrices, tristique dolor at, porttitor dolor. Etiam id cursus arcu, in dapibus nibh. Pellentesque non porta leo. Nulla eros odio, egestas quis efficitur vel, pretium sed.</p>
-                    </div>
-                
-                  </div>
-                
-                  <div class="tl-item">
-                    
-                    <div class="tl-bg" style="background-image: url('./img/4.jpg')"></div>
-                    
-                    <div class="tl-year">
-                      <p class="f2 heading--sanSerif">2019</p>
-                    </div>
-                
-                    <div class="tl-content">
-                      <h1 class="f3 text--accent ttu">Mauris vitae nunc elem</h1>
-                      <p>Suspendisse ac mi at dolor sodales faucibus. Nunc sagittis ornare purus non euismod. Donec vestibulum efficitur tortor, eget efficitur enim facilisis consequat. Vivamus laoreet laoreet elit. Ut ut varius metus, bibendum imperdiet ex. Curabitur diam quam, blandit at risus nec, pulvinar porttitor lorem. Pellentesque dolor elit.</p>
-                    </div>
-                
-                  </div>
-            </section>
-        </div> -->
+    <!-- Giới Thiệu -->
+    <section id="about" class="py-20 relative z-10">
+        <div class="max-w-4xl mx-auto px-6 text-center glass-card rounded-3xl p-10 md:p-16" data-aos="flip-up" data-aos-duration="1000">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-slate-800">Câu Chuyện Của Tôi</h2>
+            <p class="text-lg md:text-xl text-slate-600 font-medium leading-relaxed">
+                Tôi là một lập trình viên yêu thích sự sáng tạo. Trang web này không chỉ là một portfolio, mà là một sân chơi để tôi kết hợp giữa <b>Logic của Code</b> và <b>Nghệ thuật của UI/UX</b>. Các dự án bên dưới được đồng bộ trực tiếp từ GitHub để đảm bảo bạn luôn nhìn thấy những bản cập nhật mới nhất!
+            </p>
+        </div>
+    </section>
 
-
-        <div class="work" id="work">
-            <div class="title-work">All <span>Projects</span> Content</div>
-                <div class="container">
-                    <a class="project" href="https://iamhieuxz.github.io/photos-page/" >
-                        <figure>
-                            <img src="./img/project4.jpg" alt="1">
-                            <figcaption>
-                                <div>
-                                    <h3>Photos/Film Laneding Page Design</h3>
-                                    <p class="cta">View project 1</p>
-                                </div>
-                            </figcaption>
-                        </figure>
-                    </a>
-                    <a class="project" href="#" >
-                            <figure>
-                                <img src="./img/project2.jpg" alt="2" >
-                                <figcaption>
-                                    <div>
-                                        <h3>The Two</h3>
-                                        <p class="cta">View project 2</p>
-                                    </div>
-                                </figcaption>
-                            </figure>
-                    </a>
-                    <a class="project" href="#" >
-                            <figure>
-                                <img src="./img/project3.jpg" alt="3">
-                                <figcaption>
-                                    <div>
-                                        <h3>The Three</h3>
-                                        <p class="cta">View project 3</p>
-                                    </div>
-                                </figcaption>
-                            </figure>
-                    </a>
-                    <a class="project" href="#" >
-                            <figure>
-                                <img src="./img/project1.jpg" alt="4">
-                                <figcaption>
-                                    <div>
-                                        <h3>The Four</h3>
-                                        <p class="cta">View project 4</p>
-                                    </div>
-                                </figcaption>
-                            </figure>
-                    </a>
-                    <a class="project" href="#" >
-                            <figure>
-                                <img src="./img/project3.jpg" alt="5">
-                                <figcaption>
-                                    <div>
-                                        <h3>The Five</h3>
-                                        <p class="cta">View project 5</p>
-                                    </div>
-                                </figcaption>
-                            </figure>
-                    </a>
-                    <a class="project" href="#" >
-                            <figure>
-                                <img src="./img/project2.jpg" alt="6">
-                                <figcaption>
-                                    <div>
-                                        <h3>The Six</h3>
-                                        <p class="cta">View project 6</p>
-                                    </div>
-                                </figcaption>
-                            </figure>
-                    </a>
-                    <a class="project" href="#" >
-                            <figure>
-                                <img src="./img/project4.jpg" alt="7">
-                                <figcaption>
-                                    <div>
-                                        <h3>The Seven</h3>
-                                        <p class="cta">View project 7</p>
-                                    </div>
-                                </figcaption>
-                            </figure>
-                    </a>
-                </div>
-           
-        <h5 class="media-tag">@iamhieuxz</h5>
-        <div class="media-social">
-            <ul>    
-                <li><a href="https://www.facebook.com/iamhieuxz" target="__blank" class='bx bxl-facebook-square' ></a></li>
-                <li><a href="https://www.instagram.com/iamhieuxz/" class='bx bxl-instagram'target="__blank" ></a></li>
-                <li><a href="https://www.flickr.com/photos/159355731@N04/" class='bx bxl-flickr' target="__blank" ></a></li>
-                <li><a href="https://github.com/iamhieuxz" class='bx bxl-github' target="__blank"></a></li>
-            </ul>
+    <!-- Dự Án -->
+    <section id="projects" class="py-20 max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-extrabold mb-4 text-slate-800">Dự Án Nổi Bật <i class="fa-solid fa-rocket text-pink-500"></i></h2>
         </div>
 
+        <div id="github-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="animate-pulse glass-card rounded-3xl p-8 h-60"></div>
+            <div class="animate-pulse glass-card rounded-3xl p-8 h-60"></div>
+            <div class="animate-pulse glass-card rounded-3xl p-8 h-60"></div>
+        </div>
+    </section>
 
-    </div>
+    <!-- Footer & Contact -->
+    <footer id="contact" class="mt-20 relative z-10">
+        <div class="max-w-5xl mx-auto px-6 mb-16 relative" data-aos="zoom-in-up">
+            <div class="bg-gradient-to-br from-violet-600 via-fuchsia-600 to-pink-500 rounded-[3rem] p-12 text-center text-white shadow-2xl shadow-pink-500/30 overflow-hidden relative">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
 
-    <div class="bottom" id="contact">
-        <footer></footer>
-            <a class='button type3' href="mailto:iamhieuxz@hotmail.com?Subject=Hi%20Hieu" target="__blank">Contact Me</a>
-            <p> "Nói cho tôi những điều bạn cần  😜 !"</p>
-            <div class="copyright"> Copyright © 2019 | by @iamhieuxz</div>
-        </footer>
-    </div>
-    
+                <h3 class="text-3xl md:text-5xl font-extrabold mb-6 relative z-10">Cùng tạo ra điều tuyệt vời!</h3>
+                <p class="text-lg text-pink-100 mb-10 max-w-2xl mx-auto relative z-10">Dù là một dự án lớn, một ý tưởng điên rồ hay chỉ đơn giản là muốn nói "Xin chào", hộp thư của tôi luôn mở.</p>
 
+                <a href="mailto:email-cua-ban@gmail.com" class="relative z-10 inline-flex items-center gap-3 bg-white text-violet-600 font-bold text-lg px-8 py-4 rounded-full hover:scale-105 hover:shadow-xl transition-all duration-300">
+                    <i class="fa-solid fa-paper-plane"></i> Bắn Email Ngay
+                </a>
+            </div>
+        </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
-    <script src="./js/app.js"></script>
+        <div class="glass-card border-t-0 border-white rounded-t-[3rem] pt-12 pb-8 px-6 text-center">
+            <div class="flex justify-center items-center space-x-4 mb-8">
+                <a href="https://github.com/iamhieuxz" class="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center text-slate-700 hover:text-white hover:bg-slate-900 hover:-translate-y-2 transition-all duration-300 text-2xl">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="#" class="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center text-slate-700 hover:text-white hover:bg-blue-600 hover:-translate-y-2 transition-all duration-300 text-2xl">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="#" class="w-14 h-14 rounded-full bg-white shadow-md flex items-center justify-center text-slate-700 hover:text-white hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-500 hover:-translate-y-2 transition-all duration-300 text-2xl">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+
+            <p class="text-slate-500 font-medium">
+                &copy; 2026 <b>iamhieuxz</b>. Code bằng ☕ và 💻.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Thư viện Javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
