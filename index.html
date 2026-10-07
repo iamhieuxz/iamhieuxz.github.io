@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiếu XZ | Creative Portfolio</title>
+    <meta name="description" content="Portfolio sáng tạo của Hiếu XZ — Front-End Developer & UI/UX Enthusiast">
+
+    <!-- Favicon & App Icons -->
+    <link rel="icon" type="image/svg+xml" href="img/logo.svg">
+    <link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#ea580c">
+    <link rel="manifest" href="img/site.webmanifest">
+    <meta name="theme-color" content="#1a0a05">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Tông cam tối - Dark Orange
+                        ember: {
+                            50:  '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                            950: '#431407',
+                        },
+                        cocoa: {
+                            900: '#1a0a05',
+                            950: '#0d0502',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow-orange': '0 0 40px -10px rgba(249, 115, 22, 0.5)',
+                        'glow-orange-lg': '0 0 80px -20px rgba(249, 115, 22, 0.6)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Local Fonts & Styles -->
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="antialiased relative selection:bg-ember-500 selection:text-white">
+
+    <!-- Skip link cho a11y -->
+    <a href="#main" class="skip-link">Bỏ qua đến nội dung chính</a>
+
+    <!-- === NỀN CAM TỐI VỚI GRID + GRADIENT MỊN === -->
+    <div class="fixed inset-0 w-full h-full z-[-1] overflow-hidden bg-cocoa-950 pointer-events-none">
+        <!-- Lưới dots tinh tế -->
+        <div class="absolute inset-0 bg-grid opacity-30"></div>
+        <!-- Các khối gradient cam -->
+        <div class="absolute top-0 -left-20 w-96 h-96 bg-ember-600 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-blob"></div>
+        <div class="absolute top-20 right-0 w-80 h-80 bg-amber-500 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div class="absolute bottom-0 left-1/3 w-96 h-96 bg-orange-700 rounded-full mix-blend-screen filter blur-3xl opacity-35 animate-blob animation-delay-4000"></div>
+        <!-- Vignette -->
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-cocoa-950"></div>
+    </div>
+
+    <!-- Thanh Điều Hướng -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-5xl z-50 glass-nav rounded-full px-6 py-4 transition-all duration-300" id="navbar">
+        <div class="flex justify-between items-center">
+            <a href="#" class="site-logo" aria-label="Trang chủ Hiếu XZ">
+                <img src="img/logo.svg" alt="Hiếu XZ Logo" width="36" height="36">
+                <span>iamhieuxz</span>
+            </a>
+            <div class="hidden md:flex items-center gap-1 font-semibold text-ember-100" id="nav-menu">
+                <a href="#about" class="nav-link">Giới Thiệu</a>
+                <a href="#projects" class="nav-link">Dự Án</a>
+                <a href="#skills" class="nav-link">Kỹ Năng</a>
+                <a href="#contact" class="nav-link">Liên Hệ</a>
+            </div>
+            <button class="md:hidden text-ember-400 text-xl p-2 rounded-lg hover:bg-ember-900/50 transition-colors" id="menu-toggle" aria-label="Mở menu" aria-expanded="false">
+                <i class="fa-solid fa-bars" id="menu-icon"></i>
+            </button>
+        </div>
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden flex-col gap-1 mt-4 pt-4 border-t border-ember-900/50" id="mobile-menu">
+            <a href="#about" class="nav-link-mobile">Giới Thiệu</a>
+            <a href="#projects" class="nav-link-mobile">Dự Án</a>
+            <a href="#skills" class="nav-link-mobile">Kỹ Năng</a>
+            <a href="#contact" class="nav-link-mobile">Liên Hệ</a>
+        </div>
+    </nav>
+
+    <main id="main">
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center pt-28 pb-12 px-6 relative">
+        <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+            <div class="text-center lg:text-left order-2 lg:order-1" data-aos="fade-up-right" data-aos-duration="1000">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-dark text-sm font-bold text-ember-300 mb-6">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-ember-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-ember-500"></span>
+                    </span>
+                    Sẵn sàng cho những ý tưởng mới
+                </div>
+
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 text-white leading-[1.1]">
+                    Xin chào 👋 <br> tôi là
+                    <span class="relative inline-block">
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-ember-400 via-orange-400 to-amber-300">Hiếu</span>
+                        <svg class="absolute w-full h-4 -bottom-1 left-0 text-ember-500" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 15 100 5" stroke="currentColor" stroke-width="4" fill="transparent" stroke-linecap="round"/></svg>
+                    </span>
+                </h1>
+
+                <p class="text-xl md:text-2xl text-ember-100/80 font-medium mb-8 h-10">
+                    Chuyên gia <span id="typed-text" class="text-ember-400 font-bold"></span>
+                </p>
+
+                <!-- Quick info chips -->
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8 text-sm">
+                    <span class="info-chip">
+                        <i class="fa-solid fa-location-dot text-ember-400"></i> Việt Nam
+                    </span>
+                    <span class="info-chip">
+                        <i class="fa-solid fa-briefcase text-ember-400"></i> Front-End Dev
+                    </span>
+                    <span class="info-chip">
+                        <i class="fa-solid fa-graduation-cap text-ember-400"></i> UI/UX Lover
+                    </span>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                    <a href="#projects" class="btn-primary w-full sm:w-auto">
+                        <i class="fa-solid fa-rocket"></i> Khám Phá Dự Án
+                    </a>
+                    <a href="https://github.com/iamhieuxz" target="_blank" rel="noopener" class="btn-ghost w-full sm:w-auto">
+                        <i class="fa-brands fa-github text-xl"></i> Theo Dõi GitHub
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex justify-center order-1 lg:order-2" data-aos="zoom-in" data-aos-duration="1200">
+                <div class="relative w-64 h-64 md:w-80 md:h-80 animate-float">
+                    <!-- Vòng tròn dashed quay -->
+                    <div class="absolute inset-0 border-2 border-dashed border-ember-500/60 rounded-full animate-[spin_15s_linear_infinite]"></div>
+                    <div class="absolute inset-3 border border-ember-400/30 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
+                    <!-- Glow đằng sau avatar -->
+                    <div class="absolute inset-8 bg-gradient-to-br from-ember-500 to-orange-700 rounded-full blur-2xl opacity-50"></div>
+                    <img src="https://avatars.githubusercontent.com/iamhieuxz" alt="Avatar Hiếu XZ"
+                         class="absolute inset-4 w-[calc(100%-32px)] h-[calc(100%-32px)] rounded-full object-cover shadow-2xl z-10 border-4 border-ember-500/30 bg-ember-950">
+
+                    <!-- Floating badges -->
+                    <div class="absolute -top-2 -right-2 bg-gradient-to-br from-ember-500 to-orange-600 p-3 rounded-2xl shadow-xl shadow-ember-500/40 z-20 text-white text-xl rotate-12 hover:rotate-0 transition-transform">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div class="absolute bottom-8 -left-4 bg-gradient-to-br from-amber-500 to-ember-600 p-3 rounded-2xl shadow-xl shadow-amber-500/40 z-20 text-white text-xl -rotate-12 hover:rotate-0 transition-transform">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div class="absolute -bottom-2 right-8 bg-gradient-to-br from-orange-500 to-red-600 p-3 rounded-2xl shadow-xl shadow-orange-500/40 z-20 text-white text-xl rotate-6 hover:rotate-0 transition-transform">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-ember-400/70 animate-bounce" aria-hidden="true">
+            <i class="fa-solid fa-chevron-down text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- Giới Thiệu -->
+    <section id="about" class="py-20 relative z-10">
+        <div class="max-w-4xl mx-auto px-6 text-center glass-card rounded-3xl p-10 md:p-16" data-aos="flip-up" data-aos-duration="1000">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-6 text-white">
+                Câu Chuyện Của Tôi
+                <span class="inline-block ml-2">🔥</span>
+            </h2>
+            <p class="text-lg md:text-xl text-ember-100/80 font-medium leading-relaxed">
+                Tôi là một lập trình viên yêu thích sự sáng tạo. Trang web này không chỉ là một portfolio, mà là một sân chơi để tôi kết hợp giữa <b class="text-ember-400">Logic của Code</b> và <b class="text-ember-400">Nghệ thuật của UI/UX</b>. Các dự án bên dưới được đồng bộ trực tiếp từ GitHub để đảm bảo bạn luôn nhìn thấy những bản cập nhật mới nhất!
+            </p>
+        </div>
+    </section>
+
+    <!-- Kỹ năng -->
+    <section id="skills" class="py-20 max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <h2 class="text-4xl font-extrabold mb-4 text-white">Công Nghệ <span class="bg-clip-text text-transparent bg-gradient-to-r from-ember-400 to-amber-300">Tôi Dùng</span></h2>
+            <p class="text-ember-200/70 max-w-2xl mx-auto">Những công cụ và ngôn ngữ giúp tôi biến ý tưởng thành sản phẩm thực tế</p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div class="skill-card" data-aos="zoom-in" data-aos-delay="0">
+                <i class="fa-brands fa-html5 text-3xl text-orange-500"></i>
+                <span>HTML5</span>
+            </div>
+            <div class="skill-card" data-aos="zoom-in" data-aos-delay="50">
+                <i class="fa-brands fa-css3-alt text-3xl text-blue-500"></i>
+                <span>CSS3</span>
+            </div>
+            <div class="skill-card" data-aos="zoom-in" data-aos-delay="100">
+                <i class="fa-brands fa-js text-3xl text-yellow-400"></i>
+                <span>JavaScript</span>
+            </div>
+            <div class="skill-card" data-aos="zoom-in" data-aos-delay="150">
+                <i class="fa-brands fa-tailwind text-3xl text-cyan-400"></i>
+                <span>Tailwind</span>
+            </div>
+            <div class="skill-card" data-aos="zoom-in" data-aos-delay="200">
+                <i class="fa-brands fa-react text-3xl text-cyan-300"></i>
+                <span>React</span>
+            </div>
+            <div class="skill-card" data-aos="zoom-in" data-aos-delay="250">
+                <i class="fa-brands fa-git-alt text-3xl text-orange-600"></i>
+                <span>Git</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dự Án -->
+    <section id="projects" class="py-20 max-w-6xl mx-auto px-6 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl font-extrabold mb-4 text-white">Dự Án Nổi Bật <i class="fa-solid fa-rocket text-ember-500"></i></h2>
+            <p class="text-ember-200/70">Đồng bộ trực tiếp từ <a href="https://github.com/iamhieuxz" target="_blank" rel="noopener" class="text-ember-400 hover:text-ember-300 underline decoration-dotted">GitHub</a></p>
+        </div>
+
+        <div id="github-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+    </section>
+
+    <!-- Stats nhanh -->
+    <section class="py-12 relative z-10">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="stats-grid">
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="0">
+                    <i class="fa-solid fa-code-branch text-ember-400 text-2xl mb-2"></i>
+                    <div class="stat-value" data-target="0" id="stat-repos">0</div>
+                    <div class="stat-label">Repositories</div>
+                </div>
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fa-solid fa-star text-amber-400 text-2xl mb-2"></i>
+                    <div class="stat-value" data-target="0" id="stat-stars">0</div>
+                    <div class="stat-label">Total Stars</div>
+                </div>
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fa-solid fa-users text-orange-400 text-2xl mb-2"></i>
+                    <div class="stat-value" data-target="0" id="stat-followers">0</div>
+                    <div class="stat-label">Followers</div>
+                </div>
+                <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fa-solid fa-heart text-red-400 text-2xl mb-2"></i>
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Đam Mê</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- Footer & Contact -->
+    <footer id="contact" class="mt-20 relative z-10">
+        <div class="max-w-5xl mx-auto px-6 mb-16 relative" data-aos="zoom-in-up">
+            <div class="bg-gradient-to-br from-ember-600 via-orange-700 to-amber-800 rounded-[3rem] p-12 text-center text-white shadow-2xl shadow-ember-500/30 overflow-hidden relative">
+                <!-- Decorative glow -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-yellow-300 opacity-20 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+
+                <h3 class="text-3xl md:text-5xl font-extrabold mb-6 relative z-10">Cùng tạo ra điều tuyệt vời! 🚀</h3>
+                <p class="text-lg text-ember-100 mb-10 max-w-2xl mx-auto relative z-10">Dù là một dự án lớn, một ý tưởng điên rồ hay chỉ đơn giản là muốn nói "Xin chào", hộp thư của tôi luôn mở.</p>
+
+                <a href="mailto:hiuexz@gmail.com" class="relative z-10 inline-flex items-center gap-3 bg-white text-ember-700 font-bold text-lg px-8 py-4 rounded-full hover:scale-105 hover:shadow-xl hover:shadow-black/30 transition-all duration-300">
+                    <i class="fa-solid fa-paper-plane"></i> Bắn Email Ngay
+                </a>
+            </div>
+        </div>
+
+        <div class="glass-footer border-t border-ember-900/30 pt-12 pb-8 px-6 text-center rounded-t-[3rem]">
+            <div class="flex justify-center items-center gap-4 mb-8 flex-wrap">
+                <a href="https://github.com/iamhieuxz" target="_blank" rel="noopener" class="social-btn hover:!bg-slate-900 hover:!text-white" aria-label="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="#" class="social-btn hover:!bg-blue-600 hover:!text-white" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-btn hover:!bg-gradient-to-tr hover:!from-yellow-400 hover:!via-pink-500 hover:!to-purple-500 hover:!text-white" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="mailto:hiuexz@gmail.com" class="social-btn hover:!bg-ember-600 hover:!text-white" aria-label="Email">
+                    <i class="fa-solid fa-envelope"></i>
+                </a>
+            </div>
+
+            <p class="text-ember-200/60 font-medium">
+                &copy; 2026 <b class="text-ember-400">iamhieuxz</b>. Code bằng ☕ và 💻 trên tone cam 🔥.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Nút quay lại đầu trang -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-gradient-to-br from-ember-500 to-orange-700 text-white shadow-lg shadow-ember-500/40 flex items-center justify-center opacity-0 pointer-events-none hover:scale-110 transition-all duration-300" aria-label="Quay lại đầu trang">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Thư viện Javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

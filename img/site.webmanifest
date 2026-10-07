@@ -1,0 +1,14 @@
+{
+    "name": "Hiếu XZ | Creative Portfolio",
+    "short_name": "Hiếu XZ",
+    "icons": [
+        {
+            "src": "/img/logo.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ],
+    "theme_color": "#f8fafc",
+    "background_color": "#f8fafc",
+    "display": "standalone"
+}
