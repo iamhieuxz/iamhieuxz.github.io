@@ -1,14 +1,16 @@
 {
-    "name": "Hiếu XZ | Creative Portfolio",
-    "short_name": "Hiếu XZ",
+    "name": "Hiếu Thế — Front-End Developer",
+    "short_name": "Hiếu Thế",
+    "description": "Portfolio cá nhân của Hiếu Thế — Front-End Developer tại TP. Hồ Chí Minh.",
     "icons": [
         {
             "src": "/img/logo.svg",
             "sizes": "any",
-            "type": "image/svg+xml"
+            "type": "image/svg+xml",
+            "purpose": "any"
         }
     ],
-    "theme_color": "#f8fafc",
-    "background_color": "#f8fafc",
+    "theme_color": "#0A0A0B",
+    "background_color": "#0A0A0B",
     "display": "standalone"
 }
