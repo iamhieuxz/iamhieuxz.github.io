@@ -22,6 +22,11 @@
     <link rel="preconnect" href="https://api.github.com" crossorigin>
     <link rel="preconnect" href="https://avatars.githubusercontent.com" crossorigin>
 
+    <!-- Display + mono: Anton (poster grotesque, hỗ trợ tiếng Việt) & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
     <!-- Tailwind CSS (design tokens nằm trong class .tk dưới đây) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -36,8 +41,9 @@
                         accent:  { DEFAULT: '#F97316', soft: 'rgba(249,115,22,0.14)' },
                     },
                     fontFamily: {
-                        sans:  ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                        mono:  ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
+                        sans:    ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['Anton', 'Outfit', 'Impact', 'sans-serif'],
+                        mono:    ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
                     },
                     maxWidth: { shell: '1080px' },
                     transitionTimingFunction: { swift: 'cubic-bezier(0.22, 1, 0.36, 1)' },
@@ -48,10 +54,19 @@
 
     <!-- Local fonts + styles -->
     <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/main.css?v=5">
+    <link rel="stylesheet" href="css/main.css?v=7">
+
+    <noscript>
+        <style>[data-reveal], .mask-inner { opacity: 1 !important; transform: none !important; }</style>
+    </noscript>
 </head>
 
-<body class="font-sans antialiased bg-ground text-ink selection:bg-accent selection:text-white">
+<body class="font-sans antialiased bg-ground text-ink selection:bg-accent selection:text-ground">
+
+    <!-- Atmosphere layers -->
+    <div class="grain" aria-hidden="true"></div>
+    <div class="blueprint" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div id="progress" aria-hidden="true"></div>
 
     <a href="#main" class="skip-link">Bỏ qua đến nội dung chính</a>
 
@@ -60,16 +75,17 @@
             class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-colors duration-200 ease-swift">
         <nav class="mx-auto flex h-16 max-w-shell items-center justify-between px-6" aria-label="Điều hướng chính">
 
-            <a href="#" class="flex items-center gap-2.5" aria-label="Hiếu Thế — trang chủ">
+            <a href="#main" class="group flex items-center gap-2.5" aria-label="Hiếu Thế — trang chủ">
                 <img src="img/logo.svg" alt="" width="26" height="26" class="shrink-0">
                 <span class="text-[0.9375rem] font-semibold tracking-tight">iamhieuxz</span>
+                <span class="nav-tag font-mono">HT·01</span>
             </a>
 
             <ul class="hidden items-center gap-1 md:flex" id="desktop-nav">
-                <li><a class="nav-link" href="#work">Công trình</a></li>
-                <li><a class="nav-link" href="#stack">Stack</a></li>
-                <li><a class="nav-link" href="#about">Giới thiệu</a></li>
-                <li><a class="nav-link" href="#contact">Liên hệ</a></li>
+                <li><a class="nav-link" href="#work"><sup class="nav-num font-mono">01</sup>Công trình</a></li>
+                <li><a class="nav-link" href="#stack"><sup class="nav-num font-mono">02</sup>Stack</a></li>
+                <li><a class="nav-link" href="#about"><sup class="nav-num font-mono">03</sup>Giới thiệu</a></li>
+                <li><a class="nav-link" href="#contact"><sup class="nav-num font-mono">04</sup>Liên hệ</a></li>
             </ul>
 
             <div class="flex items-center gap-2">
@@ -112,10 +128,10 @@
         <!-- Mobile nav -->
         <div id="mobile-nav" class="hidden border-t border-line bg-surface-1 md:hidden">
             <ul class="mx-auto max-w-shell px-6 py-3">
-                <li><a class="nav-link-mobile" href="#work">Công trình</a></li>
-                <li><a class="nav-link-mobile" href="#stack">Stack</a></li>
-                <li><a class="nav-link-mobile" href="#about">Giới thiệu</a></li>
-                <li><a class="nav-link-mobile" href="#contact">Liên hệ</a></li>
+                <li><a class="nav-link-mobile" href="#work"><sup class="nav-num font-mono">01</sup>Công trình</a></li>
+                <li><a class="nav-link-mobile" href="#stack"><sup class="nav-num font-mono">02</sup>Stack</a></li>
+                <li><a class="nav-link-mobile" href="#about"><sup class="nav-num font-mono">03</sup>Giới thiệu</a></li>
+                <li><a class="nav-link-mobile" href="#contact"><sup class="nav-num font-mono">04</sup>Liên hệ</a></li>
             </ul>
         </div>
     </header>
@@ -123,7 +139,7 @@
     <main id="main">
 
         <!-- ══ HERO ══ -->
-        <section class="hero relative mx-auto max-w-shell px-6 pb-24 pt-32 sm:pb-32 sm:pt-40">
+        <section class="hero relative mx-auto max-w-shell px-6 pb-20 pt-28 sm:pb-24 sm:pt-36">
 
             <!-- Layer 0: dot-matrix field. Fixed, parallaxed, masked to fade at edges. -->
             <div class="hero-grid" aria-hidden="true"></div>
@@ -131,86 +147,120 @@
             <div class="hero-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
 
             <div class="relative flex flex-col gap-6">
-                <p class="flex items-center gap-2.5 text-sm text-ink-dim" data-reveal>
+                <p class="hero-status flex items-center gap-2.5 font-mono text-xs tracking-[0.14em] text-ink-dim" data-reveal>
                     <span class="availability-dot" aria-hidden="true"></span>
-                    <span>Đang nhận việc freelance</span>
+                    <span>ĐANG NHẬN VIỆC FREELANCE</span>
                 </p>
 
-                <h1 class="max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight sm:text-6xl" data-reveal>
-                    Hiếu Thế
-                    <span class="block text-ink-mute">Front-End Developer</span>
-                    <!-- Layer 2: outlined duplicate sitting behind the solid one -->
-                    <span class="headline-ghost" aria-hidden="true">Hiếu Thế</span>
+                <!-- Massive poster name. Two lines: solid + outline.
+                     Masked slide-up reveal handled by .mask-line/.mask-inner. -->
+                <h1 class="hero-name font-display uppercase" data-reveal>
+                    <span class="mask-line"><span class="mask-inner line-solid" style="transition-delay:60ms">Hiếu</span></span>
+                    <span class="mask-line"><span class="mask-inner line-outline" style="transition-delay:170ms">Thế<sup class="name-mark font-mono" aria-hidden="true">®</sup></span></span>
+                    <span class="sr-only">Hiếu Thế — Front-End Developer</span>
                 </h1>
 
-                <p class="max-w-xl text-base leading-relaxed text-ink-dim" data-reveal>
-                    Tôi xây dựng giao diện web tối giản, ưu tiên hiệu năng và khả năng đọc.
-                    Phần lớn công cụ tôi viết bằng Python; web là nơi tôi thể hiện gu thẩm mỹ.
+                <p class="hero-role font-mono text-xs tracking-[0.22em] text-ink-dim sm:text-sm" data-reveal>
+                    <span class="text-accent">[</span>&nbsp;FRONT-END DEVELOPER&nbsp;·&nbsp;UI ENGINEERING&nbsp;<span class="text-accent">]</span>
                 </p>
 
-                <div class="flex flex-wrap items-center gap-3 pt-2" data-reveal>
-                    <a href="#work" class="btn btn-primary">Xem công trình</a>
-                    <a href="https://github.com/iamhieuxz?tab=repositories" target="_blank" rel="noopener"
-                       class="btn btn-ghost">Tất cả repo</a>
+                <div class="mt-4 grid gap-10 sm:mt-8 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+                    <div class="flex flex-col gap-6">
+                        <p class="max-w-xl text-base leading-relaxed text-ink-dim sm:text-lg" data-reveal>
+                            Tôi xây dựng giao diện web tối giản, ưu tiên hiệu năng và khả năng đọc.
+                            Phần lớn công cụ tôi viết bằng Python; web là nơi tôi thể hiện gu thẩm mỹ.
+                        </p>
+
+                        <div class="flex flex-wrap items-center gap-3" data-reveal>
+                            <a href="#work" class="btn btn-primary">Xem công trình</a>
+                            <a href="https://github.com/iamhieuxz?tab=repositories" target="_blank" rel="noopener"
+                               class="btn btn-ghost">Tất cả repo</a>
+                        </div>
+                    </div>
+
+                    <!-- Spec sheet — mono key/value register, technical drawing style -->
+                    <dl class="spec-sheet font-mono text-[0.8125rem]" data-reveal>
+                        <div class="spec-row">
+                            <dt class="spec-key">Chức danh</dt>
+                            <dd class="spec-val">Front-End Developer</dd>
+                        </div>
+                        <div class="spec-row">
+                            <dt class="spec-key">Địa chỉ</dt>
+                            <dd class="spec-val">TP. Hồ Chí Minh, VN</dd>
+                        </div>
+                        <div class="spec-row">
+                            <dt class="spec-key">Trạng thái</dt>
+                            <dd class="spec-val text-accent">Nhận việc freelance</dd>
+                        </div>
+                        <div class="spec-row">
+                            <dt class="spec-key">Công cụ</dt>
+                            <dd class="spec-val">Python · HTML · CSS · JS</dd>
+                        </div>
+                    </dl>
                 </div>
             </div>
 
             <!-- Số liệu thật từ GitHub API -->
-            <dl class="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line
-                       bg-line sm:mt-24 sm:grid-cols-4" id="stats" data-reveal>
+            <dl class="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line
+                       bg-line sm:mt-20 sm:grid-cols-4" id="stats" data-reveal>
                 <div class="stat">
-                    <dt class="stat-label">Repositories</dt>
-                    <dd class="stat-value" data-stat="repos">—</dd>
+                    <dt class="stat-label font-mono">Repositories</dt>
+                    <dd class="stat-value font-display" data-stat="repos">—</dd>
                 </div>
                 <div class="stat">
-                    <dt class="stat-label">Ngôn ngữ</dt>
-                    <dd class="stat-value" data-stat="langs">—</dd>
+                    <dt class="stat-label font-mono">Ngôn ngữ</dt>
+                    <dd class="stat-value font-display" data-stat="langs">—</dd>
                 </div>
                 <div class="stat">
-                    <dt class="stat-label">Followers</dt>
-                    <dd class="stat-value" data-stat="followers">—</dd>
+                    <dt class="stat-label font-mono">Followers</dt>
+                    <dd class="stat-value font-display" data-stat="followers">—</dd>
                 </div>
                 <div class="stat">
-                    <dt class="stat-label">Từ <span data-stat="since">2017</span></dt>
-                    <dd class="stat-value" data-stat="years">—</dd>
+                    <dt class="stat-label font-mono">Từ <span data-stat="since">2017</span></dt>
+                    <dd class="stat-value font-display" data-stat="years">—</dd>
                 </div>
             </dl>
 
-            <!-- Layer 3: infinite marquee. Content duplicated in markup (not JS)
+            <!-- Layer 3: infinite marquee, full-bleed. Content duplicated in markup (not JS)
                  so it never reflows on load; pauses on hover and for reduced-motion. -->
-            <div class="ticker mt-14 border-y border-line py-3.5" data-reveal>
+            <div class="ticker mt-14 border-y border-line py-4" data-reveal>
                 <div class="ticker-track">
                     <ul class="ticker-run">
-                        <li>Python</li><li>HTML</li><li>CSS</li><li>Git</li>
-                        <li>Web API</li><li>Responsive</li><li>Accessibility</li><li>UI Engineering</li>
+                        <li>Python</li><li class="t-out">HTML</li><li>CSS</li><li class="t-out">Git</li>
+                        <li>Web API</li><li class="t-out">Responsive</li><li>Accessibility</li><li class="t-out">UI Engineering</li>
                     </ul>
                     <ul class="ticker-run" aria-hidden="true">
-                        <li>Python</li><li>HTML</li><li>CSS</li><li>Git</li>
-                        <li>Web API</li><li>Responsive</li><li>Accessibility</li><li>UI Engineering</li>
+                        <li>Python</li><li class="t-out">HTML</li><li>CSS</li><li class="t-out">Git</li>
+                        <li>Web API</li><li class="t-out">Responsive</li><li>Accessibility</li><li class="t-out">UI Engineering</li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- ══ CÔNG TRÌNH ══ -->
-        <section id="work" class="scroll-mt-20 border-t border-line py-20 sm:py-24">
-            <div class="mx-auto max-w-shell px-6">
-                <div class="flex flex-wrap items-end justify-between gap-4">
-                    <div>
-                        <h2 class="section-title">Công trình</h2>
-                        <!-- Sub-counter: increments as the API hydrates the grid. -->
-                        <p class="mt-2 flex items-center gap-2 text-sm text-ink-dim">
-                            <span id="counter-prefix" aria-hidden="true">_</span>
-                            <span id="counter-label">Đang kéo dữ liệu từ GitHub</span>
-                            <span class="font-mono text-ink-mute" id="counter-count">0</span>
-                            <span class="text-ink-mute">repo</span>
+        <!-- ══ 01 · CÔNG TRÌNH ══ -->
+        <section id="work" class="scroll-mt-20 border-t border-line py-20 sm:py-28">
+            <div class="shell-x relative mx-auto max-w-shell px-6">
+                <header class="sec-head" data-reveal>
+                    <p class="sec-index font-mono">
+                        <span class="text-accent">01</span>
+                        <i aria-hidden="true"></i>
+                        <span>Công trình / Work</span>
+                    </p>
+                    <div class="flex flex-wrap items-end justify-between gap-4">
+                        <h2 class="sec-title font-display uppercase">Công trình</h2>
+                        <p class="pb-2 font-mono text-xs text-ink-mute sm:text-sm">
+                            <a class="link" href="https://github.com/iamhieuxz?tab=repositories"
+                               target="_blank" rel="noopener">github.com/iamhieuxz</a>
                         </p>
                     </div>
-                    <p class="text-sm text-ink-mute">
-                        <a class="link" href="https://github.com/iamhieuxz?tab=repositories"
-                           target="_blank" rel="noopener">github.com/iamhieuxz</a>
+                    <!-- Sub-counter: increments as the API hydrates the grid. -->
+                    <p class="mt-3 flex items-center gap-2 font-mono text-sm text-ink-dim">
+                        <span id="counter-prefix" aria-hidden="true">_</span>
+                        <span id="counter-label">Đang kéo dữ liệu từ GitHub</span>
+                        <span class="text-ink" id="counter-count">0</span>
+                        <span class="text-ink-mute">repo</span>
                     </p>
-                </div>
+                </header>
 
                 <!-- Ngôn ngữ lọc: giá trị render từ API, không hard-code -->
                 <div class="mt-8 flex flex-wrap items-center gap-2" id="lang-filters" role="group" aria-label="Lọc theo ngôn ngữ"></div>
@@ -218,45 +268,59 @@
                 <!-- Layer A: drifting dot pattern, parallaxed in opposite direction to the hero -->
                 <div class="work-field" aria-hidden="true"></div>
 
-                <div id="repo-grid" class="mt-6 grid gap-4 sm:grid-cols-2"
+                <div id="repo-grid" class="mt-8 grid gap-4 sm:grid-cols-2"
                      aria-busy="true"
                      data-reveal>
                     <!-- JS appends cards here. Each card gets data-tilt for
-                         pointer-driven 3D rotation and data-parallax for
-                         multi-layer depth on the inner spots. -->
+                         pointer-driven 3D rotation and a ghost index number. -->
                 </div>
 
                 <p id="repo-status" class="sr-only" role="status" aria-live="polite"></p>
             </div>
         </section>
 
-        <!-- ══ STACK ══ -->
-        <section id="stack" class="scroll-mt-20 border-t border-line py-20 sm:py-24">
-            <div class="mx-auto max-w-shell px-6">
-                <h2 class="section-title">Stack</h2>
-                <p class="mt-2 max-w-xl text-sm text-ink-dim">
-                    Thống kê dưới đây được tính từ ngôn ngữ chính của các repo công khai.
-                </p>
-                <div id="stack-list" class="mt-8 space-y-3"></div>
+        <!-- ══ 02 · STACK ══ -->
+        <section id="stack" class="scroll-mt-20 border-t border-line py-20 sm:py-28">
+            <div class="shell-x relative mx-auto max-w-shell px-6">
+                <header class="sec-head" data-reveal>
+                    <p class="sec-index font-mono">
+                        <span class="text-accent">02</span>
+                        <i aria-hidden="true"></i>
+                        <span>Stack / Công cụ</span>
+                    </p>
+                    <h2 class="sec-title font-display uppercase">Stack</h2>
+                    <p class="mt-3 max-w-xl text-sm text-ink-dim">
+                        Thống kê dưới đây được tính từ ngôn ngữ chính của các repo công khai.
+                    </p>
+                </header>
+                <div id="stack-list" class="mt-10 space-y-4"></div>
             </div>
         </section>
 
-        <!-- ══ GIỚI THIỆU ══ -->
-        <section id="about" class="scroll-mt-20 border-t border-line py-20 sm:py-24">
-            <div class="mx-auto max-w-shell px-6">
-                <div class="flex flex-wrap items-end justify-between gap-4">
-                    <h2 class="section-title">Giới thiệu</h2>
-                    <p class="text-sm text-ink-mute"><span class="font-mono text-ink-dim">~$</span> whoami</p>
-                </div>
+        <!-- ══ 03 · GIỚI THIỆU ══ -->
+        <section id="about" class="scroll-mt-20 border-t border-line py-20 sm:py-28">
+            <div class="shell-x relative mx-auto max-w-shell px-6">
+                <header class="sec-head" data-reveal>
+                    <p class="sec-index font-mono">
+                        <span class="text-accent">03</span>
+                        <i aria-hidden="true"></i>
+                        <span>Giới thiệu / About</span>
+                    </p>
+                    <div class="flex flex-wrap items-end justify-between gap-4">
+                        <h2 class="sec-title font-display uppercase">Giới thiệu</h2>
+                        <p class="pb-2 font-mono text-xs text-ink-mute sm:text-sm"><span class="text-accent">~$</span> whoami</p>
+                    </div>
+                </header>
 
                 <!-- Terminal window: faux editor frame -->
-                <article class="terminal mt-8" aria-label="Giới thiệu dạng terminal"
+                <article class="terminal mt-10" aria-label="Giới thiệu dạng terminal"
                          data-reveal data-tilt>
                     <header class="terminal-bar">
                         <span class="dot" style="--c:#FF5F57" title="close"></span>
                         <span class="dot" style="--c:#FEBC2E" title="minimize"></span>
                         <span class="dot" style="--c:#28C840" title="maximize"></span>
                         <span class="terminal-title">hiuexz@portfolio:~</span>
+                        <span class="terminal-tty font-mono">TTY-01</span>
                     </header>
 
                     <div class="terminal-body" id="term-body">
@@ -269,31 +333,51 @@
             </div>
         </section>
 
-        <!-- ══ LIÊN HỆ ══ -->
-        <section id="contact" class="scroll-mt-20 border-t border-line py-20 sm:py-24">
-            <div class="mx-auto max-w-shell px-6">
-                <h2 class="section-title">Liên hệ</h2>
-                <p class="mt-4 max-w-xl text-base leading-relaxed text-ink-dim">
-                    Đang nhận dự án Front-End và công cụ nội bộ.
-                    Cách nhanh nhất là mở một issue trên GitHub.
-                </p>
+        <!-- ══ 04 · LIÊN HỆ ══ -->
+        <section id="contact" class="scroll-mt-20 border-t border-line py-20 sm:py-28">
+            <div class="shell-x relative mx-auto max-w-shell px-6">
+                <header class="sec-head" data-reveal>
+                    <p class="sec-index font-mono">
+                        <span class="text-accent">04</span>
+                        <i aria-hidden="true"></i>
+                        <span>Liên hệ / Contact</span>
+                    </p>
+                    <h2 class="sec-title sec-title-xl font-display uppercase">
+                        Làm việc<br>
+                        <span class="line-outline-xl">cùng nhau</span>
+                    </h2>
+                </header>
 
-                <div class="mt-8 flex flex-wrap items-center gap-3">
-                    <a href="https://github.com/iamhieuxz/issues/new" target="_blank" rel="noopener"
-                       class="btn btn-primary">
-                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                            <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 1.5a5 5 0 1 1 0 10A5 5 0 0 1 8 3Zm-.75 2v4.5h1.5V5h-1.5Zm0 5.5v1.5h1.5v-1.5h-1.5Z"/>
-                        </svg>
-                        Mở issue trên GitHub
-                    </a>
-                    <a href="https://github.com/iamhieuxz" target="_blank" rel="noopener" class="btn btn-ghost">
-                        Xem hồ sơ
-                    </a>
+                <div class="mt-8 grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+                    <div class="flex flex-col gap-6">
+                        <p class="max-w-xl text-base leading-relaxed text-ink-dim sm:text-lg" data-reveal>
+                            Đang nhận dự án Front-End và công cụ nội bộ.
+                            Cách nhanh nhất là mở một issue trên GitHub.
+                        </p>
+
+                        <div class="flex flex-wrap items-center gap-3" data-reveal>
+                            <a href="https://github.com/iamhieuxz/issues/new" target="_blank" rel="noopener"
+                               class="btn btn-primary">
+                                <svg class="h-4 w-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                    <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 1.5a5 5 0 1 1 0 10A5 5 0 0 1 8 3Zm-.75 2v4.5h1.5V5h-1.5Zm0 5.5v1.5h1.5v-1.5h-1.5Z"/>
+                                </svg>
+                                Mở issue trên GitHub
+                            </a>
+                            <a href="https://github.com/iamhieuxz" target="_blank" rel="noopener" class="btn btn-ghost">
+                                Xem hồ sơ
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Email register row — placeholder giữ nguyên, chờ email thật -->
+                    <div class="mail-row font-mono text-sm" data-reveal>
+                        <span class="mail-key text-ink-mute">Email</span>
+                        <span class="mail-val text-accent">[email của bạn]</span>
+                    </div>
                 </div>
 
-                <p class="mt-6 text-sm text-ink-mute">
-                    Email: <span class="font-mono text-accent">[email của bạn]</span>
-                    <span class="block pt-1 text-ink-mute/70">← thay placeholder này bằng email thật của bạn</span>
+                <p class="mt-6 font-mono text-xs text-ink-mute/70">
+                    ← thay placeholder này bằng email thật của bạn
                 </p>
             </div>
         </section>
@@ -301,10 +385,14 @@
 
     <!-- ══ FOOTER ══ -->
     <footer class="border-t border-line">
-        <div class="mx-auto flex max-w-shell flex-col gap-3 px-6 py-8 text-sm text-ink-mute
+        <div class="mx-auto flex max-w-shell flex-col gap-3 px-6 py-8 font-mono text-xs text-ink-mute
                     sm:flex-row sm:items-center sm:justify-between">
-            <p>© <span data-year>2026</span> Hiếu Thế. <span class="text-ink-dim">iamhieuxz</span></p>
-            <p class="font-mono text-xs">TP. Hồ Chí Minh · Việt Nam</p>
+            <p>© <span data-year>2026</span> Hiếu Thế <span class="text-ink-dim">/ iamhieuxz</span></p>
+            <p class="tracking-[0.08em]">TP. HỒ CHÍ MINH · 10.8231°N 106.6297°E</p>
+            <p class="flex items-center gap-4">
+                <a href="brand.html" class="link uppercase tracking-[0.12em]">Brand kit</a>
+                <a href="#main" class="link uppercase tracking-[0.12em]">Về đầu ↑</a>
+            </p>
         </div>
     </footer>
 
@@ -320,6 +408,9 @@
         </svg>
     </button>
 
-    <script src="js/main.js?v=5"></script>
+    <!-- GSAP self-hosted (core + ScrollTrigger), pinned 3.13.0 -->
+    <script src="js/vendor/gsap.min.js"></script>
+    <script src="js/vendor/ScrollTrigger.min.js"></script>
+    <script src="js/main.js?v=7"></script>
 </body>
 </html>

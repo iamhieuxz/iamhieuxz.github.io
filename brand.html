@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="vi" data-motion="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand system — iamhieuxz</title>
+    <meta name="description" content="Bộ nhận diện thương hiệu iamhieuxz: mark, wordmark, lockup, màu, typography và quy tắc sử dụng.">
+    <link rel="icon" type="image/svg+xml" href="img/logo.svg">
+    <meta name="theme-color" content="#0A0A0B">
+    <meta name="color-scheme" content="dark">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/main.css?v=7">
+
+    <style>
+        /* Brand board — same tokens as the portfolio */
+        body { padding-bottom: 0; }
+
+        .b-top {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--line);
+            background-color: rgba(10, 10, 11, 0.84);
+            -webkit-backdrop-filter: saturate(150%) blur(12px);
+            backdrop-filter: saturate(150%) blur(12px);
+        }
+        .b-top-in {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            height: 4rem;
+            max-width: 1080px;
+            margin-inline: auto;
+            padding-inline: 1.5rem;
+        }
+        .b-crumb {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--fg-mute);
+        }
+        .b-crumb b { color: var(--fg); font-weight: 500; }
+        .b-back {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--fg-dim);
+            text-decoration: none;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--radius-sm);
+            padding: 0.5rem 0.875rem;
+            transition: color 150ms ease-out, border-color 150ms ease-out;
+        }
+        .b-back:hover { color: var(--accent); border-color: var(--accent); }
+
+        .b-wrap { max-width: 1080px; margin-inline: auto; padding-inline: 1.5rem; }
+
+        .b-hero { padding-block: 5rem 4rem; border-bottom: 1px solid var(--line); position: relative; }
+        .b-hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 9vw, 6.5rem);
+            line-height: 0.94;
+            text-transform: uppercase;
+            margin-top: 0.75rem;
+        }
+        .b-hero h1 em {
+            font-style: normal;
+            color: transparent;
+            -webkit-text-stroke: 1.5px rgba(250, 250, 250, 0.4);
+        }
+        .b-hero p.lead {
+            margin-top: 1.25rem;
+            max-width: 34rem;
+            color: var(--fg-dim);
+            line-height: 1.65;
+        }
+        .b-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 2rem;
+            margin-top: 2rem;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--fg-mute);
+        }
+        .b-meta b { color: var(--fg); font-weight: 500; }
+
+        .b-sec { padding-block: 4rem; border-bottom: 1px solid var(--line); }
+
+        .b-grid { display: grid; gap: 1rem; }
+        @media (min-width: 720px) { .b-grid.cols-2 { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 720px) { .b-grid.cols-3 { grid-template-columns: repeat(3, 1fr); } }
+
+        .b-top-left { display: flex; align-items: center; gap: 0.75rem; }
+
+        .logo-tile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 2rem;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            background-color: var(--surface);
+        }
+        .logo-tile.light { background-color: #FAFAFA; border-color: #E4E4E7; }
+        .logo-tile .cap {
+            position: absolute;
+            inset: auto auto 0.625rem 0.75rem;
+        }
+        .tile-cap {
+            margin-top: 0.625rem;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--fg-mute);
+        }
+
+        .size-ladder {
+            display: flex;
+            align-items: flex-end;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding: 2rem;
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            background-color: var(--surface);
+        }
+        .size-item { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .size-item span {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--fg-mute);
+        }
+
+        .spec-list { display: grid; gap: 0.875rem; margin-top: 1.5rem; }
+        .spec-list li {
+            display: flex;
+            gap: 0.875rem;
+            font-size: 0.9375rem;
+            line-height: 1.55;
+            color: var(--fg-dim);
+        }
+        .spec-list li b { color: var(--fg); font-weight: 500; }
+        .spec-list li::before {
+            content: '+';
+            font-family: var(--font-mono);
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .lockup-demo {
+            position: relative;
+            display: inline-block;
+            padding: 2.25rem;
+            border: 1px dashed var(--line-strong);
+            border-radius: var(--radius-sm);
+        }
+        .lockup-demo::before, .lockup-demo::after {
+            content: '';
+            position: absolute;
+            width: 7px; height: 7px;
+            border: 1px solid var(--fg-mute);
+        }
+        .lockup-demo::before { top: -4px; left: -4px; border-right: 0; border-bottom: 0; }
+        .lockup-demo::after { bottom: -4px; right: -4px; border-left: 0; border-top: 0; }
+
+        .swatches { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); }
+        @media (min-width: 720px) { .swatches { grid-template-columns: repeat(4, 1fr); } }
+        .swatch { border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; background: var(--surface); }
+        .swatch .chip-color { height: 92px; }
+        .swatch .info { padding: 0.875rem 1rem 1rem; }
+        .swatch .info code {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--fg);
+        }
+        .swatch .info p { margin-top: 0.3125rem; font-size: 11.5px; line-height: 1.5; color: var(--fg-mute); }
+        .swatch .aa {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.0625rem 0.375rem;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--radius-xs);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.08em;
+            color: var(--fg-dim);
+        }
+
+        .type-card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            background: var(--surface);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 260px;
+        }
+        .type-card .tc-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--fg-mute);
+        }
+        .type-card .tc-sample { color: var(--fg); }
+        .type-card .tc-use { margin-top: auto; font-size: 12.5px; color: var(--fg-mute); line-height: 1.55; }
+
+        .rules { display: grid; gap: 1rem; }
+        @media (min-width: 720px) { .rules { grid-template-columns: 1fr 1fr; } }
+        .rule-col {
+            border: 1px solid var(--line);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            background: var(--surface);
+        }
+        .rule-col h3 {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .rule-col.do h3 { color: #86EFAC; }
+        .rule-col.dont h3 { color: #FCA5A5; }
+        .rule-col li {
+            display: flex;
+            gap: 0.625rem;
+            padding-block: 0.4375rem;
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: var(--fg-dim);
+            border-bottom: 1px solid var(--line);
+        }
+        .rule-col li:last-child { border-bottom: 0; }
+        .rule-col.do li::before { content: '✓'; color: #86EFAC; font-family: var(--font-mono); }
+        .rule-col.dont li::before { content: '✕'; color: #FCA5A5; font-family: var(--font-mono); }
+
+        .assets { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+        .asset-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            color: var(--fg);
+            text-decoration: none;
+            transition: border-color 150ms ease-out, color 150ms ease-out;
+        }
+        .asset-link:hover { border-color: var(--accent); color: var(--accent); }
+        .asset-link::after { content: '↓'; color: var(--accent); }
+
+        .b-foot {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-block: 2rem;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            color: var(--fg-mute);
+        }
+        .b-foot a { color: var(--fg-dim); text-decoration: none; }
+        .b-foot a:hover { color: var(--accent); }
+    </style>
+</head>
+
+<body>
+
+    <div class="grain" aria-hidden="true"></div>
+    <div class="blueprint" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+    <header class="b-top">
+        <div class="b-top-in">
+            <div class="b-top-left">
+                <img src="img/logo.svg" alt="iamhieuxz mark" width="28" height="28">
+                <p class="b-crumb"><b>iamhieuxz</b> / brand system</p>
+            </div>
+            <a class="b-back" href="index.html">← Portfolio</a>
+        </div>
+    </header>
+
+    <main class="b-wrap">
+
+        <section class="b-hero">
+            <p class="sec-index"><span class="text-accent">00</span><i aria-hidden="true"></i><span>Brand system / v1.1 — mark v2 “Ligature”</span></p>
+            <h1>Bộ nhận diện<br><em>iamhieuxz</em></h1>
+            <p class="lead">
+                Một hệ thống tối giản cho một front-end engineer: chữ poster, nét kỹ thuật,
+                và một tín hiệu cam duy nhất. Toàn bộ asset là vector thuần, không phụ thuộc font khi hiển thị.
+            </p>
+            <div class="b-meta">
+                <span>Chủ sở hữu <b>Hiếu Thế</b></span>
+                <span>Phiên bản <b>v1.1 · 2026</b></span>
+                <span>Nền tảng <b>Dark-first</b></span>
+                <span>Tín hiệu <b>#F97316</b></span>
+            </div>
+        </section>
+
+        <!-- 01 · MARK -->
+        <section class="b-sec">
+            <header class="sec-head" style="margin-bottom:1.5rem">
+                <p class="sec-index"><span class="text-accent">01</span><i aria-hidden="true"></i><span>Mark / Monogram</span></p>
+                <h2 class="sec-title">Mark</h2>
+            </header>
+
+            <div class="b-grid cols-3">
+                <figure>
+                    <div class="logo-tile">
+                        <img src="img/brand/mark.svg" alt="Mark nền tối" width="120" height="120">
+                    </div>
+                    <figcaption class="tile-cap">Primary — nền Ground</figcaption>
+                </figure>
+                <figure>
+                    <div class="logo-tile light">
+                        <img src="img/brand/mark-light.svg" alt="Mark nền sáng" width="120" height="120">
+                    </div>
+                    <figcaption class="tile-cap">Light — nền Ink #FAFAFA</figcaption>
+                </figure>
+                <figure>
+                    <div class="logo-tile">
+                        <img src="img/brand/mark-mono.svg" alt="Mark một màu" width="120" height="120" style="filter: invert(1)">
+                    </div>
+                    <figcaption class="tile-cap">Mono — in một màu / mask</figcaption>
+                </figure>
+            </div>
+
+            <div class="size-ladder" style="margin-top:1rem">
+                <div class="size-item"><img src="img/brand/mark.svg" alt="" width="128" height="128"><span>128px</span></div>
+                <div class="size-item"><img src="img/brand/mark.svg" alt="" width="64" height="64"><span>64px</span></div>
+                <div class="size-item"><img src="img/brand/mark.svg" alt="" width="32" height="32"><span>32px</span></div>
+                <div class="size-item"><img src="img/brand/mark.svg" alt="" width="16" height="16"><span>16px</span></div>
+            </div>
+
+            <ul class="spec-list">
+                <li><b>Ligature “i+h”</b> — một trụ dọc đóng vai cả thân “i” lẫn thân trái của “h”; vai “h” vươn cao hơn vòm để phân biệt rõ với “n”.</li>
+                <li><b>Vòm bán nguyệt</b> bán kính 14.5, nét dày 8.5 đơn vị trên lưới 64 — hình học thuần, không bo mềm.</li>
+                <li><b>Chấm i màu Signal Orange</b> — tín hiệu duy nhất trong mark; không đổi sang màu khác.</li>
+                <li><b>Kích thước tối thiểu</b> 16px (favicon). Dưới ngưỡng đó, dùng ô vuông cam đặc.</li>
+            </ul>
+        </section>
+
+        <!-- 02 · WORDMARK & LOCKUP -->
+        <section class="b-sec">
+            <header class="sec-head" style="margin-bottom:1.5rem">
+                <p class="sec-index"><span class="text-accent">02</span><i aria-hidden="true"></i><span>Wordmark / Lockup</span></p>
+                <h2 class="sec-title">Wordmark</h2>
+            </header>
+
+            <div class="logo-tile" style="justify-content:flex-start;min-height:0;padding:2.5rem">
+                <img src="img/brand/wordmark.svg" alt="Wordmark iamhieuxz" style="width:100%;max-width:420px;height:auto">
+            </div>
+            <p class="tile-cap">Wordmark — JetBrains Mono Bold chuyển thành path · cursor cam kết thúc tên</p>
+
+            <div class="b-grid cols-2" style="margin-top:1rem">
+                <div>
+                    <div class="logo-tile" style="min-height:0;padding:2.5rem;justify-content:flex-start">
+                        <img src="img/brand/lockup.svg" alt="Lockup ngang nền tối" style="width:100%;max-width:480px;height:auto">
+                    </div>
+                    <p class="tile-cap">Lockup — nền tối</p>
+                </div>
+                <div>
+                    <div class="logo-tile light" style="min-height:0;padding:2.5rem;justify-content:flex-start">
+                        <img src="img/brand/lockup-light.svg" alt="Lockup ngang nền sáng" style="width:100%;max-width:480px;height:auto">
+                    </div>
+                    <p class="tile-cap">Lockup — nền sáng</p>
+                </div>
+            </div>
+
+            <div class="lockup-demo" style="margin-top:2rem">
+                <img src="img/brand/lockup.svg" alt="Minh hoạ clearspace" style="width:100%;max-width:440px;height:auto">
+            </div>
+            <p class="tile-cap">Clearspace tối thiểu quanh lockup: x = chiều cao chấm i</p>
+
+            <ul class="spec-list">
+                <li><b>Wordmark</b> luôn viết thường toàn bộ: “iamhieuxz”. Không viết hoa, không đổi font.</li>
+                <li><b>Cursor cam</b> là một phần của wordmark; không đổi màu, không bỏ rời khỏi tên.</li>
+                <li><b>Tỉ lệ lockup</b>: mark cao 2× chiều cao chữ thường; khoảng cách mark–chữ bằng 0.3× chiều rộng mark.</li>
+                <li><b>Kích thước tối thiểu</b>: wordmark rộng ≥ 88px, lockup rộng ≥ 120px.</li>
+            </ul>
+        </section>
+
+        <!-- 03 · COLOR -->
+        <section class="b-sec">
+            <header class="sec-head" style="margin-bottom:1.5rem">
+                <p class="sec-index"><span class="text-accent">03</span><i aria-hidden="true"></i><span>Color / Tokens</span></p>
+                <h2 class="sec-title">Màu</h2>
+            </header>
+
+            <div class="swatches">
+                <div class="swatch">
+                    <div class="chip-color" style="background:#0A0A0B;border-bottom:1px solid var(--line)"></div>
+                    <div class="info"><code>--c-ground · #0A0A0B</code><p>Nền chính. Gần đen, ấm.</p></div>
+                </div>
+                <div class="swatch">
+                    <div class="chip-color" style="background:#121214"></div>
+                    <div class="info"><code>--c-surface-1 · #121214</code><p>Card, panel.</p></div>
+                </div>
+                <div class="swatch">
+                    <div class="chip-color" style="background:#1A1A1D"></div>
+                    <div class="info"><code>--c-surface-2 · #1A1A1D</code><p>Hover, lớp phủ.</p></div>
+                </div>
+                <div class="swatch">
+                    <div class="chip-color" style="background:#F97316"></div>
+                    <div class="info"><code>--accent · #F97316</code><p>Tín hiệu. Một điểm cam mỗi màn hình.<span class="aa">AA 7.06:1</span></p></div>
+                </div>
+                <div class="swatch">
+                    <div class="chip-color" style="background:#FAFAFA"></div>
+                    <div class="info"><code>--fg · #FAFAFA</code><p>Chữ chính.<span class="aa">AAA 18.96:1</span></p></div>
+                </div>
+                <div class="swatch">
+                    <div class="chip-color" style="background:#A1A1AA"></div>
+                    <div class="info"><code>--fg-dim · #A1A1AA</code><p>Chữ phụ.<span class="aa">AAA 7.72:1</span></p></div>
+                </div>
+                <div class="swatch">
+                    <div class="chip-color" style="background:#9C9CA3"></div>
+                    <div class="info"><code>--fg-mute · #9C9CA3</code><p>Nhãn, meta.<span class="aa">AA 7.25:1</span></p></div>
+                </div>
+                <div class="swatch">
+                    <div class="chip-color" style="background:#2A2A2E"></div>
+                    <div class="info"><code>--line · rgba(255,255,255,.08)</code><p>Hairline cấu trúc.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 04 · TYPE -->
+        <section class="b-sec">
+            <header class="sec-head" style="margin-bottom:1.5rem">
+                <p class="sec-index"><span class="text-accent">04</span><i aria-hidden="true"></i><span>Typography</span></p>
+                <h2 class="sec-title">Chữ</h2>
+            </header>
+
+            <div class="b-grid cols-3">
+                <div class="type-card">
+                    <p class="tc-label">Display — Anton</p>
+                    <p class="tc-sample" style="font-family:var(--font-display);font-size:3rem;line-height:1;text-transform:uppercase">Hiếu Thế<br>2026</p>
+                    <p class="tc-use">Tiêu đề poster. Chỉ dùng uppercase, line-height 0.94, không dùng cho body. Hỗ trợ tiếng Việt đầy đủ.</p>
+                </div>
+                <div class="type-card">
+                    <p class="tc-label">Body — Outfit</p>
+                    <p class="tc-sample" style="font-size:1.5rem;line-height:1.4;font-weight:500">Giao diện tối giản,<br>hiệu năng cao.</p>
+                    <p class="tc-use">Nội dung, tiêu đề card, đoạn văn. Weights 300–800, line-height 1.55–1.65.</p>
+                </div>
+                <div class="type-card">
+                    <p class="tc-label">Mono — JetBrains Mono</p>
+                    <p class="tc-sample" style="font-family:var(--font-mono);font-size:1rem;line-height:1.7">
+                        <span style="color:var(--accent)">$</span> whoami<br>
+                        hiuexz<span style="color:var(--accent)">_</span>
+                    </p>
+                    <p class="tc-use">Nhãn, số liệu, terminal, URL, nút. Chữ thường với letter-spacing 0.1em khi uppercase.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 05 · RULES -->
+        <section class="b-sec">
+            <header class="sec-head" style="margin-bottom:1.5rem">
+                <p class="sec-index"><span class="text-accent">05</span><i aria-hidden="true"></i><span>Usage / Rules</span></p>
+                <h2 class="sec-title">Quy tắc</h2>
+            </header>
+
+            <div class="rules">
+                <div class="rule-col do">
+                    <h3>Nên</h3>
+                    <ul>
+                        <li>Dùng file SVG gốc trong <code style="font-family:var(--font-mono);font-size:12px">img/brand/</code>.</li>
+                        <li>Đặt mark trên nền Ground hoặc Ink; giữ nguyên chấm i màu cam.</li>
+                        <li>Giữ đúng tỉ lệ lockup và clearspace tối thiểu.</li>
+                        <li>Một điểm nhấn cam cho mỗi khung hình — cam không dùng làm màu khối lớn.</li>
+                    </ul>
+                </div>
+                <div class="rule-col dont">
+                    <h3>Không</h3>
+                    <ul style="list-style:none">
+                        <li>Đổi màu, thêm gradient hoặc đổ bóng cho mark.</li>
+                        <li>Kéo giãn, xoay, hoặc viết hoa wordmark.</li>
+                        <li>Đặt logo trên ảnh nhiễu mà không có nền bảo vệ.</li>
+                        <li>Dùng wordmark dưới 88px hoặc mark dưới 16px.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="assets">
+                <a class="asset-link" href="img/brand/mark.svg" download>mark.svg</a>
+                <a class="asset-link" href="img/brand/mark-light.svg" download>mark-light.svg</a>
+                <a class="asset-link" href="img/brand/mark-mono.svg" download>mark-mono.svg</a>
+                <a class="asset-link" href="img/brand/wordmark.svg" download>wordmark.svg</a>
+                <a class="asset-link" href="img/brand/wordmark-light.svg" download>wordmark-light.svg</a>
+                <a class="asset-link" href="img/brand/lockup.svg" download>lockup.svg</a>
+                <a class="asset-link" href="img/brand/lockup-light.svg" download>lockup-light.svg</a>
+            </div>
+        </section>
+
+        <footer class="b-foot">
+            <p>© <span data-year>2026</span> Hiếu Thế — iamhieuxz brand system v1.1</p>
+            <a href="index.html">← Về portfolio</a>
+        </footer>
+    </main>
+
+    <script>
+        document.querySelectorAll('[data-year]').forEach(el => {
+            el.textContent = String(new Date().getFullYear());
+        });
+    </script>
+</body>
+</html>

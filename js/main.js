@@ -1,15 +1,17 @@
 /* =========================================================
    Hiếu Thế — portfolio behaviour
-   Vanilla JS. No AOS, no Typed.js, no framework.
+   Vanilla JS + GSAP 3 (self-hosted) + ScrollTrigger.
 
    BUDGET NOTE
      Unauthenticated GitHub is 60 requests/hour/IP. We make EXACTLY
      two calls (user + repos) and derive everything else from them.
 
    MOTION NOTE
-     Everything that moves is gated behind prefers-reduced-motion.
-     The same gate also disables 3-D tilt and stack parallax because
-     those don't degrade gracefully — they reset to flat if disabled.
+     Everything that moves is gated behind the site's motion system:
+     <html data-motion="on|off|auto"> written by the header toggle.
+     GSAP only takes over when motion is enabled AND the vendor
+     scripts loaded; otherwise the CSS reveal path (IntersectionObserver
+     + transitions) drives the page.
    ========================================================= */
 
 (() => {
@@ -56,10 +58,13 @@
         return el.innerHTML;
     };
 
-    /* Single source of truth for motion state.
-       Order matters: an explicit user choice on the toggle wins over
-       the OS setting, so someone who enabled animations in Windows can
-       still switch them off here, and vice versa. */
+    /* Only https URLs are ever rendered into href attributes. */
+    const safeUrl = (u) => (typeof u === 'string' && /^https:\/\//.test(u) ? u : '#');
+
+    const inViewport = (el, ratio = 0.92) =>
+        el.getBoundingClientRect().top < window.innerHeight * ratio;
+
+    /* ----- motion state (single source of truth) ----- */
     const MOTION_KEY = 'portfolio:motion';
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -88,6 +93,10 @@
             btn.setAttribute('aria-label',
                 `Hiệu ứng chuyển động: ${on ? 'đang bật' : 'đang tắt'}. Bấm để ${on ? 'tắt' : 'bật'}.`);
         }
+
+        document.dispatchEvent(new CustomEvent('portfolio:motionchange', {
+            detail: { on },
+        }));
     }
 
     function initMotionToggle() {
@@ -125,7 +134,186 @@
     const formatCount = (n) =>
         n >= 1000 ? `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k` : String(n);
 
-    /* ----- reveal ----- */
+    /* ---------------------------------------------------------------
+       GSAP — hero intro, scroll reveals, section rules, decorative
+       parallax, magnetic primary buttons. Fully reverted when the
+       user turns motion off.
+    --------------------------------------------------------------- */
+    let gsapOn = false;
+    let gsapCtx = null;
+    let magnetCleanup = [];
+
+    const gsapReady = () =>
+        !!window.gsap && !!window.ScrollTrigger && motionEnabled();
+
+    function initGSAP() {
+        if (gsapOn || !gsapReady()) return;
+
+        const gsap = window.gsap;
+        const ST = window.ScrollTrigger;
+        gsap.registerPlugin(ST);
+        document.documentElement.classList.add('gsap-on');
+        gsapOn = true;
+
+        gsapCtx = gsap.context(() => {
+
+            /* ---- hero name: unmask the poster lines ---- */
+            const nameEl = $('.hero-name');
+            if (nameEl) {
+                nameEl.classList.add('is-in');
+                const lines = $$('.mask-inner', nameEl);
+                gsap.set(nameEl, { autoAlpha: 1, y: 0 });
+                gsap.set(lines, { yPercent: 118 });
+                gsap.to(lines, {
+                    yPercent: 0,
+                    duration: 1.05,
+                    ease: 'power3.out',
+                    stagger: 0.12,
+                    delay: 0.08,
+                });
+            }
+
+            /* ---- hero supporting copy fades in behind the name ---- */
+            const heroFades = $$('.hero [data-reveal]')
+                .filter(el => !el.classList.contains('hero-name'));
+            if (heroFades.length) {
+                gsap.set(heroFades, { autoAlpha: 0, y: 18 });
+                gsap.to(heroFades, {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.7,
+                    ease: 'power3.out',
+                    stagger: 0.075,
+                    delay: 0.25,
+                });
+            }
+
+            /* ---- below-the-fold reveals, batched per viewport ---- */
+            const below = $$('[data-reveal]').filter(el => !el.closest('.hero'));
+            const already = [];
+            const deferred = [];
+            below.forEach(el => (inViewport(el) ? already : deferred).push(el));
+
+            if (deferred.length) gsap.set(deferred, { autoAlpha: 0, y: 22 });
+            if (already.length) {
+                if (prefersReducedMotion()) {
+                    gsap.set(already, { autoAlpha: 1, y: 0 });
+                } else {
+                    gsap.fromTo(already,
+                        { autoAlpha: 0, y: 22 },
+                        { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out' });
+                }
+            }
+            if (deferred.length) {
+                ST.batch(deferred, {
+                    start: 'top 88%',
+                    once: true,
+                    onEnter: (batch) => gsap.to(batch, {
+                        autoAlpha: 1, y: 0,
+                        duration: 0.7, stagger: 0.08, ease: 'power3.out',
+                        overwrite: true,
+                    }),
+                });
+            }
+
+            /* ---- section index hairline draws on scroll ---- */
+            $$('.sec-index i').forEach((line) => {
+                gsap.fromTo(line,
+                    { scaleX: 0 },
+                    {
+                        scaleX: 1,
+                        duration: 0.9,
+                        ease: 'power3.inOut',
+                        scrollTrigger: { trigger: line, start: 'top 94%', once: true },
+                    });
+            });
+
+            /* ---- decorative parallax, scrub-linked to scroll ---- */
+            const scrub = (el, y, trigger) => {
+                if (!el) return;
+                gsap.to(el, {
+                    y,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: trigger || el.parentElement || el,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 0.4,
+                    },
+                });
+            };
+            scrub($('.hero-grid'), 90, '.hero');
+            scrub($('.hero-orbit'), -60, '.hero');
+            scrub($('.work-field'), -70, '#work');
+        });
+
+        /* ---- magnetic primary buttons ---- */
+        if (window.matchMedia('(hover: hover)').matches) {
+            $$('.btn-primary').forEach((btn) => {
+                const xTo = gsap.quickTo(btn, 'x', { duration: 0.45, ease: 'power3.out' });
+                const yTo = gsap.quickTo(btn, 'y', { duration: 0.45, ease: 'power3.out' });
+                const onMove = (e) => {
+                    const r = btn.getBoundingClientRect();
+                    xTo((e.clientX - r.left - r.width / 2) * 0.16);
+                    yTo((e.clientY - r.top - r.height / 2) * 0.22);
+                };
+                const onLeave = () => { xTo(0); yTo(0); };
+                btn.addEventListener('pointermove', onMove);
+                btn.addEventListener('pointerleave', onLeave);
+                magnetCleanup.push(() => {
+                    btn.removeEventListener('pointermove', onMove);
+                    btn.removeEventListener('pointerleave', onLeave);
+                });
+            });
+        }
+    }
+
+    function stopGSAP() {
+        if (!gsapOn) return;
+        const gsap = window.gsap;
+        gsapOn = false;
+
+        if (gsapCtx) { gsapCtx.revert(); gsapCtx = null; }
+        if (gsap) gsap.globalTimeline.clear();
+        if (window.ScrollTrigger) window.ScrollTrigger.getAll().forEach(t => t.kill());
+
+        magnetCleanup.forEach(fn => fn());
+        magnetCleanup = [];
+
+        document.documentElement.classList.remove('gsap-on');
+
+        // Everything GSAP was driving becomes plainly visible; the
+        // CSS reduced-motion gates take over from here.
+        $$('[data-reveal], .card, .terminal, .mask-inner, .sec-index i').forEach((el) => {
+            el.classList.add('is-in');
+            el.style.removeProperty('opacity');
+            el.style.removeProperty('visibility');
+            el.style.removeProperty('transform');
+        });
+    }
+
+    /* ---------------------------------------------------------------
+       Scroll progress hairline — scroll-linked state, safe under
+       reduced motion (it tracks the thumb, it doesn't animate alone).
+    --------------------------------------------------------------- */
+    function initProgress() {
+        const bar = $('#progress');
+        if (!bar) return;
+        let raf = 0;
+        const update = () => {
+            raf = 0;
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            const p = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+            bar.style.transform = `scaleX(${p})`;
+        };
+        window.addEventListener('scroll', () => {
+            if (!raf) raf = requestAnimationFrame(update);
+        }, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    }
+
+    /* ----- CSS reveal path (no GSAP / motion off) ----- */
     function initReveal() {
         const targets = $$('[data-reveal]');
         if (!targets.length) return;
@@ -154,16 +342,7 @@
     }
 
     /* ---------------------------------------------------------------
-       Multi-section parallax — drives --section-scroll on every
-       section, so each can pick its own depth ratio. rAF-throttled.
-    --------------------------------------------------------------- */
-    /* ---------------------------------------------------------------
-       Multi-section parallax — drives --section-scroll on every
-       section, so each can pick its own depth ratio. rAF-throttled.
-       Kept running under reduced-motion: the travel is only a few
-       pixels and is scroll-linked (not autonomous), which is the
-       kind of motion reduced-motion users tolerate. CSS resets the
-       transform anyway if the user prefers it fully off.
+       CSS-var parallax fallback (used when GSAP is not active).
     --------------------------------------------------------------- */
     function initParallax() {
         const sections = $$('main section');
@@ -175,9 +354,8 @@
             const vpMid = window.innerHeight * 0.5;
             sections.forEach(sec => {
                 const r = sec.getBoundingClientRect();
-                // Distance of section's vertical center from the viewport mid,
-                // clamped so a deeply scrolled-away section doesn't yank.
-                const d = Math.max(-window.innerHeight, Math.min(window.innerHeight, vpMid - r.top - r.height * 0.5));
+                const d = Math.max(-window.innerHeight,
+                    Math.min(window.innerHeight, vpMid - r.top - r.height * 0.5));
                 sec.style.setProperty('--section-scroll', String(d | 0));
             });
         };
@@ -191,9 +369,7 @@
     }
 
     /* ---------------------------------------------------------------
-       Pointer-driven 3D tilt + inner parallax for cards and the
-       terminal. rAF-throttled. Skipped on touch (no hover) and on
-       reduced-motion users (no graceful fallback).
+       Pointer-driven 3D tilt for cards and the terminal.
     --------------------------------------------------------------- */
     function initTilt() {
         if (prefersReducedMotion()) return;
@@ -212,7 +388,7 @@
                 const r = el._rect;
                 const px = el._px ?? 0.5;
                 const py = el._py ?? 0.5;
-                const tiltX = (py - 0.5) * -6;   // -3 .. 3 deg
+                const tiltX = (py - 0.5) * -6;
                 const tiltY = (px - 0.5) * 6;
                 el.style.transform =
                     `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0)`;
@@ -227,33 +403,27 @@
             if (!raf) raf = requestAnimationFrame(flush);
         };
 
-        const onEnter = (el) => {
-            el._rect = el.getBoundingClientRect();
-        };
-        const onMove = (e) => {
-            const el = e.currentTarget;
-            const r = el._rect || el.getBoundingClientRect();
-            el._rect = r;
-            el._px = (e.clientX - r.left) / r.width;
-            el._py = (e.clientY - r.top) / r.height;
-            queue(el);
-        };
-        const onLeave = (el) => {
-            el.style.transform = '';
-            el.style.removeProperty('--mx');
-            el.style.removeProperty('--my');
-        };
-
         items.forEach(el => {
-            el.addEventListener('pointerenter', () => onEnter(el));
-            el.addEventListener('pointermove', onMove, { passive: true });
-            el.addEventListener('pointerleave', () => onLeave(el));
+            if (el._tiltBound) return;
+            el._tiltBound = true;
+            el.addEventListener('pointerenter', () => { el._rect = el.getBoundingClientRect(); });
+            el.addEventListener('pointermove', (e) => {
+                const r = el._rect || el.getBoundingClientRect();
+                el._rect = r;
+                el._px = (e.clientX - r.left) / r.width;
+                el._py = (e.clientY - r.top) / r.height;
+                queue(el);
+            }, { passive: true });
+            el.addEventListener('pointerleave', () => {
+                el.style.transform = '';
+                el.style.removeProperty('--mx');
+                el.style.removeProperty('--my');
+            });
         });
     }
 
     /* ---------------------------------------------------------------
-       Stagger entry for grid items that all enter at once.
-       Cards get index-based delay; terminal uses left+top auto-stagger.
+       Stagger entry for grid items — CSS path.
     --------------------------------------------------------------- */
     function stagger(elements, baseDelay = 0, step = 60) {
         elements.forEach((el, i) => {
@@ -263,6 +433,39 @@
                 requestAnimationFrame(() => el.classList.add('is-in'));
             });
         });
+    }
+
+    /* GSAP-aware card reveal — whole-card links injected after fetch. */
+    function revealCards(cards) {
+        if (!cards.length) return;
+
+        if (gsapOn) {
+            const gsap = window.gsap;
+            const near = [];
+            const far = [];
+            cards.forEach(c => (inViewport(c) ? near : far).push(c));
+
+            if (far.length) gsap.set(far, { autoAlpha: 0, y: 18 });
+            if (near.length) {
+                gsap.to(near, {
+                    autoAlpha: 1, y: 0, duration: 0.55,
+                    stagger: 0.06, ease: 'power3.out',
+                });
+            }
+            if (far.length) {
+                window.ScrollTrigger.batch(far, {
+                    start: 'top 92%',
+                    once: true,
+                    onEnter: (batch) => gsap.to(batch, {
+                        autoAlpha: 1, y: 0, duration: 0.55,
+                        stagger: 0.06, ease: 'power3.out',
+                        overwrite: true,
+                    }),
+                });
+            }
+        } else {
+            stagger(cards, 80, 55);
+        }
     }
 
     /* ---------------------------------------------------------------
@@ -327,6 +530,9 @@
                 if (entry.isIntersecting) {
                     links.forEach(l => l.removeAttribute('aria-current'));
                     link.setAttribute('aria-current', 'true');
+                } else if (link.getAttribute('aria-current') === 'true') {
+                    // Leaving the band with no replacement → clear stale state.
+                    link.removeAttribute('aria-current');
                 }
             });
         }, { rootMargin: '-20% 0px -70% 0px' });
@@ -350,9 +556,7 @@
         requestAnimationFrame(step);
     }
 
-    /* ---------------------------------------------------------------
-       Counter that ticks up as cards hydrate (visually delightful)
-    --------------------------------------------------------------- */
+    /* Counter that ticks up as cards hydrate. */
     function startCounter(target) {
         const el = document.querySelector('#counter-count');
         const label = document.querySelector('#counter-label');
@@ -364,7 +568,6 @@
             if (prefix) prefix.textContent = '✓';
             return;
         }
-        // Typing animation for the label
         if (label && !label.dataset.typed) {
             label.dataset.typed = '1';
             const phrases = [
@@ -384,13 +587,10 @@
             };
             tickType();
         }
-        // Counter counts up from 0 to target once the grid is hydrated
         const obs = new IntersectionObserver((es) => {
             if (es[0].isIntersecting) {
                 countUp(el, target);
-                if (prefix) {
-                    setTimeout(() => { prefix.textContent = '✓'; }, 600);
-                }
+                if (prefix) setTimeout(() => { prefix.textContent = '✓'; }, 600);
                 obs.disconnect();
             }
         });
@@ -398,7 +598,7 @@
     }
 
     /* ---------------------------------------------------------------
-       Projects — render cards with per-language accent.
+       Projects — whole cards are anchors; the project IS the link.
     --------------------------------------------------------------- */
     const projectGrid = $('#repo-grid');
     const langFilters = $('#lang-filters');
@@ -413,11 +613,11 @@
     function forkIcon() {
         return '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3.25a2.25 2.25 0 1 0-2.12 3.02v.5a2.5 2.5 0 0 0 2.5 2.5H7v1.44a2.25 2.25 0 1 0 1.5 0V9.27h1.62a2.5 2.5 0 0 0 2.5-2.5v-.5A2.25 2.25 0 1 0 11 4.08v.69a1 1 0 0 1-1 1H5.88a1 1 0 0 1-1-1v-.5A2.25 2.25 0 0 0 5 3.25z"/></svg>';
     }
-    function extIcon() {
-        return '<svg class="card-external" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5H3.5v9h9v-3M9.5 2.5h4v4M13 3l-6.5 6.5"/></svg>';
+    function arrowIcon() {
+        return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg>';
     }
 
-    function renderCard(repo) {
+    function renderCard(repo, i) {
         const lang = repo.language || 'Other';
         const color = LANG_COLOR[lang] || LANG_COLOR.Other;
 
@@ -428,31 +628,32 @@
         const metrics = [
             repo.stargazers_count > 0 ? `<span class="card-stat star">${starIcon()}${formatCount(repo.stargazers_count)}</span>` : '',
             repo.forks_count > 0      ? `<span class="card-stat">${forkIcon()}${formatCount(repo.forks_count)}</span>` : '',
-        ].filter(Boolean).join('') || '<span class="card-mute">Chưa có chỉ số</span>';
+        ].filter(Boolean).join('') || '<span>Chưa có chỉ số</span>';
 
-        /* Per-card CSS custom props used by .card-glow, .card-lang,
-           .card-title:hover, .card-foot, .card-external. One source
-           of truth per card so the whole card reads as one accent. */
-        const style = `--card-accent:${color};`;
+        const index = String(i + 1).padStart(2, '0');
 
+        /* Whole card is an <a> — clicking anywhere opens the repo.
+           No nested links inside, so the markup stays valid. */
         return `
-        <article class="card" data-tilt style="${style}">
+        <a class="card" data-tilt href="${safeUrl(repo.html_url)}" target="_blank" rel="noopener"
+           style="--card-accent:${color}">
             <span class="card-glow" aria-hidden="true"></span>
-            ${extIcon()}
-            <div class="flex items-center gap-2">
-                <span class="card-lang">
-                    <span class="card-lang-dot"></span>${escapeHtml(lang)}
-                </span>
-                <span class="text-xs text-ink-mute">${repo.fork ? 'fork' : 'source'}</span>
-            </div>
-            <a class="card-title" href="${repo.html_url}" target="_blank" rel="noopener"
-               style="${style.replace('--card-accent', 'color')}">${escapeHtml(repo.name)}</a>
+            <span class="card-index" aria-hidden="true">${index}</span>
+            <span class="card-toprow">
+                <span class="card-lang"><span class="card-lang-dot"></span>${escapeHtml(lang)}</span>
+                <span class="card-kind">${repo.fork ? 'fork' : 'source'}</span>
+            </span>
+            <h3 class="card-title">${escapeHtml(repo.name)}</h3>
             ${desc}
-            <div class="card-foot">
+            <p class="card-url">
+                ${arrowIcon()}
+                github.com/iamhieuxz/<b>${escapeHtml(repo.name)}</b>
+            </p>
+            <span class="card-foot">
                 <span>${relativeTime(repo.updated_at)}</span>
                 <span class="flex items-center gap-3">${metrics}</span>
-            </div>
-        </article>`;
+            </span>
+        </a>`;
     }
 
     /* "5 days ago" / "3 hours ago" — honest & no library needed. */
@@ -491,8 +692,9 @@
         projectGrid.setAttribute('aria-busy', 'false');
         repoStatus.textContent = `Hiển thị ${list.length} dự án.`;
 
-        stagger($$('.card', projectGrid), 80, 55);
-        initTilt();    // re-bind the new cards
+        revealCards($$('.card', projectGrid));
+        initTilt();                              // re-bind the new cards
+        window.ScrollTrigger?.refresh();
     }
 
     function renderFilters() {
@@ -554,7 +756,7 @@
     }
 
     /* ---------------------------------------------------------------
-       Stack
+       Stack — fill bars animate from the left via scaleX.
     --------------------------------------------------------------- */
     function renderStack(repos) {
         const counts = new Map();
@@ -571,28 +773,32 @@
             <div class="stack-row">
                 <span class="stack-name">${escapeHtml(lang)}</span>
                 <div class="stack-track">
-                    <div class="stack-fill" style="width:${pct}%;background-color:${LANG_COLOR[lang] || '#71717A'}"></div>
+                    <div class="stack-fill" data-pct="${pct}" style="background-color:${LANG_COLOR[lang] || '#71717A'}"></div>
                 </div>
                 <span class="stack-pct">${pct}%</span>
             </div>`;
         }).join('');
+
+        requestAnimationFrame(() => {
+            $$('.stack-fill').forEach((f) => {
+                f.style.transform = `scaleX(${Number(f.dataset.pct) / 100})`;
+            });
+        });
     }
 
     /* ---------------------------------------------------------------
-       Terminal — type-typed whoami output. Reduced-motion users see
-       the whole thing instantly (which is fine — it's content, not
-       decoration). The static header is constructed up-front; the
-       year-dependent JSON line is filled in just before typing.
+       Terminal — typed whoami output. Reduced-motion users see the
+       whole thing instantly (content, not decoration).
     --------------------------------------------------------------- */
     const TERM_HEADER = [
         { cmd: 'whoami',  output: 'hiuexz' },
         { cmd: 'git log --oneline | head -3', output: [
-            `a1b2c3d  ${new Date().getFullYear()}-10 — giữ portfolio ít "cutesy" hơn`,
-            'f1e2d3c  tắt gradient blob & typewriter; giữ type chứ không để trống',
+            `a1b2c3d  ${new Date().getFullYear()}-10 — viết lại portfolio: poster type + blueprint`,
+            'f1e2d3c  dựng brand kit: monogram "ih" + wordmark iamhieuxz_',
             'c1a2b3d  xác minh mọi text qua GitHub API chứ không bịa',
         ]},
         { cmd: 'open https://github.com/iamhieuxz/issues/new', output:
-            '↳ mở trình duyệt · trang trời bắc, Việt Nam' },
+            '↳ mở trình duyệt · TP. Hồ Chí Minh, Việt Nam' },
     ];
 
     const TERM_PROFILE = () => ({
@@ -607,70 +813,7 @@
 
     let userCreatedAt = null;
 
-    function renderTerminalLine(parent, parts, opts = {}) {
-        const line = document.createElement('div');
-        line.className = 'term-line';
-        parts.forEach((p) => {
-            const span = document.createElement('span');
-            span.className = p.cls || '';
-            span.textContent = p.text || '';
-            line.appendChild(span);
-        });
-        parent.appendChild(line);
-        return line;
-    }
-
-    /* Wait a frame so layout is stable before we measure scrollHeight. */
-    function scrollTerminalToBottom(el) {
-        requestAnimationFrame(() => {
-            el.scrollTop = el.scrollHeight;
-        });
-    }
-
-    function typeInto(el, char, speed) {
-        return new Promise(res => {
-            const write = () => {
-                el.textContent += char;
-                res();
-            };
-            // Speed jitter keeps it from feeling robotic.
-            if (el.textContent.length > 18 && Math.random() < 0.15) {
-                setTimeout(write, speed + Math.random() * 70);
-            } else {
-                setTimeout(write, speed + Math.random() * 20 - 10);
-            }
-        });
-    }
-
-    async function runPrompt(parent, cmd, speed = 24) {
-        const prompt = document.createElement('p');
-        prompt.className = 'term-line term-prompt';
-        parent.appendChild(prompt);
-        for (const ch of cmd) await typeInto(prompt, ch, speed);
-        return prompt;
-    }
-
-    async function runOutput(parent, line, speed = 14) {
-        if (Array.isArray(line)) {
-            for (const row of line) {
-                const el = document.createElement('p');
-                el.className = 'term-line term-mute';
-                parent.appendChild(el);
-                for (const ch of row) await typeInto(el, ch, speed);
-            }
-            return;
-        }
-        const el = document.createElement('p');
-        el.className = 'term-line term-out';
-        parent.appendChild(el);
-        for (const ch of String(line)) await typeInto(el, ch, speed);
-    }
-
     function renderJSON(parent, obj) {
-        // Render each JSON line with lightweight syntax highlighting.
-        // We deliberately strip only leading whitespace from the source
-        // string and rebuild the indent via padding — that keeps the
-        // content matched by the regex (key + colon + value) intact.
         const lines = JSON.stringify(obj, null, 2).split('\n');
 
         lines.forEach((raw) => {
@@ -679,11 +822,8 @@
 
             const line = document.createElement('p');
             line.className = 'term-line';
-            // Preserve indentation using non-breaking spaces so they
-            // don't collapse and don't break word-wrap.
-            line.appendChild(document.createTextNode(lead.replace(/\s/g, ' ')));
+            line.appendChild(document.createTextNode(lead.replace(/\s/g, ' ')));
 
-            // Captures: 1: "key":   2: "string"   3: number   4: punctuation
             const re = /("(?:[^"\\]|\\.)*"\s*:)|("(?:[^"\\]|\\.)*")|(-?\d+(?:\.\d+)?)|([{}\[\],])|(\s+)|([^\s"{}\[\],:-]+|-)/g;
             let m;
             while ((m = re.exec(body)) !== null) {
@@ -691,7 +831,8 @@
                 if (key) {
                     const colonAt = key.lastIndexOf(':');
                     const ks = key.slice(0, colonAt);
-                    const cs = key.slice(colonAt);  // ":"
+                    const cs = key.slice(colonAt);
+
                     const ksSpan = document.createElement('span');
                     ksSpan.className = 'term-key';
                     ksSpan.textContent = ks;
@@ -724,8 +865,6 @@
                 }
             }
 
-            // If the regex didn't match anything (e.g. a bare bare line),
-            // fall back to the raw body so nothing is lost.
             if (line.childNodes.length === 1) {
                 line.appendChild(document.createTextNode(body));
             }
@@ -733,15 +872,60 @@
         });
     }
 
+    function scrollTerminalToBottom(el) {
+        requestAnimationFrame(() => {
+            el.scrollTop = el.scrollHeight;
+        });
+    }
+
+    function typeInto(el, char, speed) {
+        return new Promise(res => {
+            const write = () => {
+                el.textContent += char;
+                res();
+            };
+            if (el.textContent.length > 18 && Math.random() < 0.15) {
+                setTimeout(write, speed + Math.random() * 70);
+            } else {
+                setTimeout(write, speed + Math.random() * 20 - 10);
+            }
+        });
+    }
+
+    async function runPrompt(parent, cmd, speed = 24) {
+        const prompt = document.createElement('p');
+        prompt.className = 'term-line term-prompt';
+        parent.appendChild(prompt);
+        for (const ch of cmd) await typeInto(prompt, ch, speed);
+        return prompt;
+    }
+
+    async function runOutput(parent, line, speed = 14) {
+        if (Array.isArray(line)) {
+            for (const row of line) {
+                const el = document.createElement('p');
+                el.className = 'term-line term-mute';
+                parent.appendChild(el);
+                for (const ch of row) await typeInto(el, ch, speed);
+            }
+            return;
+        }
+        const el = document.createElement('p');
+        el.className = 'term-line term-out';
+        parent.appendChild(el);
+        for (const ch of String(line)) await typeInto(el, ch, speed);
+    }
+
+    let terminalBooted = false;
+
     async function bootTerminal() {
+        if (terminalBooted) return;
         const root = $('#term-body');
         if (!root) return;
+        terminalBooted = true;
 
-        // Inline screen-reader announcer
         root.querySelector('[aria-live]').textContent = 'Bắt đầu giới thiệu.';
 
-        // Build the full list at runtime so we can read userCreatedAt (set
-        // by loadGitHub). The static + dynamic seam is just one line.
         const fullList = [
             TERM_HEADER[0],
             { cmd: 'cat profile.json', isJson: true, output: TERM_PROFILE() },
@@ -749,8 +933,6 @@
         ];
 
         if (prefersReducedMotion()) {
-            // Reduced motion: show everything at once. This is content,
-            // not decoration, so instant rendering is the correct answer.
             fullList.forEach((ln) => {
                 const p = document.createElement('p');
                 p.className = 'term-line term-prompt';
@@ -785,14 +967,11 @@
             if (ln.isJson) renderJSON(root, ln.output);
             else if (ln.output) await runOutput(root, ln.output);
 
-            // Blank gap line between commands
             root.appendChild(document.createElement('p'));
-
             scrollTerminalToBottom(root);
             await new Promise(res => setTimeout(res, 320));
         }
 
-        // Final blinking cursor
         const cur = document.createElement('span');
         cur.className = 'term-cursor';
         root.appendChild(cur);
@@ -847,13 +1026,11 @@
         if (!useful.length) { renderEmpty(); return; }
 
         allRepos = useful;
-        startCounter(allRepos.length);    // animated counter up to N
+        startCounter(allRepos.length);
         renderFilters();
         renderGrid();
         renderStack(allRepos);
 
-        // Terminal shows after the user has begun reading: footer is in view
-        // path; the about section's IntersectionObserver triggers it.
         const about = document.querySelector('#about');
         if (about && !prefersReducedMotion() && 'IntersectionObserver' in window) {
             const io = new IntersectionObserver((es) => {
@@ -864,12 +1041,9 @@
             }, { threshold: 0.15 });
             io.observe(about);
         } else {
-            bootTerminal();   // reduced-motion: render inline instantly
+            bootTerminal();
         }
 
-        // Reveal the about section from below the fold. The data-reveal
-        // markup on .terminal takes care of the frame; we just kick it
-        // when the section enters view.
         const term = document.querySelector('.terminal');
         if (term) {
             const revealIO = new IntersectionObserver((es) => {
@@ -880,22 +1054,32 @@
             }, { threshold: 0.1 });
             revealIO.observe(term);
         }
+
+        window.ScrollTrigger?.refresh();
     }
 
     function boot() {
         const yearEl = $('[data-year]');
         if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
-        initMotionToggle();
-        initReveal();
-        initParallax();
+        initProgress();
+
+        document.addEventListener('portfolio:motionchange', (e) => {
+            if (e.detail.on) initGSAP();
+            else stopGSAP();
+        });
+
+        initMotionToggle();          // dispatches the initial state
+
+        if (!gsapOn) initReveal();   // CSS fallback path
+        if (!gsapOn) initParallax(); // CSS-var fallback (GSAP scrubs otherwise)
+
         initTilt();
         initHeader();
 
         loadGitHub().catch(err => {
             console.error('[portfolio] GitHub load failed:', err);
             renderError(err.status);
-            // Boot terminal anyway with whatever data we had
             bootTerminal();
         });
     }
